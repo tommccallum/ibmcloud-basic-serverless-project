@@ -26,17 +26,12 @@ Find out more about the main components:
   - [Outline](#outline)
   - [Prerequisites](#prerequisites)
   - [Installing Angular CLI (ng)](#installing-angular-cli-ng)
-  - [Local Environment Setup](#local-environment-setup)
+  - [Setup the environment](#setup-the-environment)
   - [To remove all services](#to-remove-all-services)
-  - [App ID Setup](#app-id-setup)
-  - [Cloudant Setup](#cloudant-setup)
-  - [Cloud Functions Setup for Login](#cloud-functions-setup-for-login)
-  - [Cloud Functions Setup for protected API](#cloud-functions-setup-for-protected-api)
-  - [Setup of local Web Application](#setup-of-local-web-application)
-  - [Cloud Object Storage Setup](#cloud-object-storage-setup)
-  - [Cloud Functions Setup for HTML Function](#cloud-functions-setup-for-html-function)
-  - [Custom Domain Setup](#custom-domain-setup)
-- [Credits](#credits)
+  - [When things go wrong...](#when-things-go-wrong)
+  - [Run locally](#run-locally)
+  - [What does what?](#what-does-what)
+  - [Credits](#credits)
 
 ## Prerequisites
 
@@ -61,7 +56,7 @@ This assumes you are running a version of Linux or similar.
 sudo npm install -g @angular/cli
 ```
 
-## Local Environment Setup
+## Setup the environment
 
 Invoke the following commands:
 
@@ -71,158 +66,55 @@ $ cd serverless-basic-serverless-project
 $ ibm_login.sh
 $ ./build_all.sh
 ```
+
+The final URL will be presented to you.  Copy and paste this into your browser.  For example:
+
+```
+Done! Open your app: https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/f480843e14eb28dfb6c273dd4638dbbf5cef56da97581b5a76fff44bfa5f9c50/serverlessweb/web
+```
+
+The credentials user@demo.email, verysecret will let you in or you can try using your Google or Facebook credentials.
+
 ## To remove all services
 
 ```
 ./delete-resources.sh
 ```
 
-## App ID Setup
+## When things go wrong...
 
-[App ID](https://console.bluemix.net/catalog/services/appid) is used to authenticate users. 
+Check out the logs in the scripts directory when something goes wrong.  The build_all.sh script will warn you if the world "FAILED" appears in any of the logs and stop at the stage that had the error.
 
-**Create new App ID service instance:**
-
-Run the following command to create these artifacts:
-
-* App ID service instance 'app-id-serverless'
-* App ID Cloud Foundry alias 'app-id-serverless'
-* App ID credentials
-* App ID test user 'user@demo.email, verysecret'
+You can search for errors with the following:
 
 ```
-$ scripts/setup-app-id.sh
+grep -nH "FAILED" scripts/*.log
 ```
 
-**Reuse an existing App ID service instance:**
+The -n adds line numbers and the -H shows the file the pattern appeared in.
 
-The IBM Cloud lite plan only allows one App ID instance in your organization. If you have an App ID instance, you can use it rather than creating a new one. 
-
-In this case copy 'APPID_TENANTID', 'APPID_OAUTHURL', 'APPID_CLIENTID' and 'APPID_SECRET' from your service credentials and paste them in [local.env](local.env).
-
-## Cloudant Setup
-
-[IBM Cloudant](https://console.ng.bluemix.net/catalog/services/cloudant-nosql-db) is used to store data used by the web application.
-
-**Create new Cloudant service instance:**
-
-Run the following command to create these artifacts:
-
-* Cloudant service instance 'cloudant-serverless'
-* Cloudant database 'serverless'
-* Cloudant documents and an index
+## Run locally
 
 ```
-$ scripts/setup-cloudant.sh
-```
-
-**Reuse an existing Cloudant service instance:**
-
-The IBM Cloud lite plan only allows one Cloudant instance in your organization. If you have a Cloudant instance, you can use it rather than creating a new one. 
-
-In this case copy 'CLOUDANT_USERNAME' and 'CLOUDANT_PASSWORD' from your service credentials and paste them in [local.env](local.env).
-
-Additionally run this command to create the sample database and documents:
-
-```
-$ scripts/create-cloudant-db.sh
-```
-
-## Cloud Functions Setup for Login
-
-Run the following command to create these artifacts:
-
-* Cloud Functions sequence 'serverless-web-app-generic/login-and-redirect'
-* Cloud Functions function 'serverless-web-app-generic/login'
-* Cloud Functions function 'serverless-web-app-generic/redirect'
-* Cloud Function API 'login'
-* Redirect URL in App ID
-
-```
-$ scripts/setup-login-function.sh
-```
-
-## Cloud Functions Setup for protected API
-
-Run the following command to create these artifacts:
-
-* Cloud Functions function 'serverless-web-app-sample/function-protected'
-* Cloud Function API 'function-protected'
-
-```
-$ scripts/setup-protected-function.sh
-```
-
-## Setup of local Web Application
-
-To run the Angular web application locally, run these commands:
-
-```
-$ scripts/setup-local-webapp.sh
-$ ng serve
+cd angular
+ng serve
 ```
 
 Open http://localhost:4200 in your browser.
 
-## Cloud Object Storage Setup
+## What does what?
 
-[IBM Cloud Object Storage](https://console.bluemix.net/catalog/services/cloud-object-storage) is used to store the static resources of the web application.
-
-**Create new Object Storage service instance:**
-
-Run the following command to create these artifacts:
-
-* Object Storage instance 'object-storage-serverless'
-* Bucket 'serverless-web-[your-app-id-tenant-id]'
-* Built Angular application
-* Angular files stored in Object Storage
-
-```
-$ scripts/setup-object-storage.sh
-```
-
-To try the web application, open the URL that you get in the terminal.
-
-**Reuse an existing Object Storage service instance:**
-
-The IBM Cloud lite plan only allows one Object Storage instance in your organization. If you have an Object Storage instance, you can use it rather than creating a new one. 
-
-Define your service instance name in [scripts/upload-files-to-object-storage.sh](scripts/upload-files-to-object-storage.sh) (line 74) and run this command to create the bucket and to upload the files:
-
-```
-$ scripts/upload-files-to-object-storage.sh
-```
-
-## Cloud Functions Setup for HTML Function
-
-Since Object Storage doesn't allow to pass in parameters to requested files (e.g. https://.../index.html?param=value) another function is deployed to host the index.html file of the single page web application. All other resources are stored in Object Storage.
-
-To deploy the OpenWhisk function and the API, invoke the following command:
-
-```
-$ scripts/setup-html-function.sh
-```
-
-Open the web application with the URL that is printed in the output of the command.
+* the _angular_ directory contains our app assets including HTML, CSS and all the javascript.
+* the _documentation_ directory is the additional documentation that came with this repository
+* the _function-html_ directory as the javascript code for the serverless function 'html'.  It also contains the swagger file that defines the API to reach the serverless function.
+* the _function-login_ directory as the javascript code for the serverless functions 'login', 'redirect' and 'login-and-redirect'.  It also contains the swagger file that defines the API to reach these serverless functions.
+* the _function-protected_ directory as the javascript code for the serverless function 'function-protected'.  It also contains the swagger file that defines the API to reach the serverless function.
+* the _node_modules_ directory is where npm caches its files and will be created upon build.
+* the _scripts_ contains all the build scripts for the various services this project uses.
+* the _local.env_ file is created for each new build and contains the environment variables for the bash scripts in _scripts_ directory.
 
 
-## Custom Domain Setup
-
-When following the steps above, the sample application can be invoked via URLs like https://s3.us-south.objectstorage.softlayer.net/serverless-web-65819d17-0d02-4219-af3a-9468870673cc/serverless/web. If you want to use your own domain, you need to do some additional setup.
-
-Follow the instruction in the [documentation](https://console.bluemix.net/docs/api-management/manage_apis.html#custom_domains) or in this [blog](http://jamesthom.as/blog/2018/12/03/custom-domains-with-ibm-cloud-functions/) to set up custom domains for OpenWhisk functions.
-
-Check out the [screenshots](documentation/) in the documentation folder for more details. Make sure to set the TXT and CNAME records in your DNS settings correctly, see this [example](documentation/dns-settings.png).
-
-To deploy update the redirect URL, invoke the following command:
-
-```
-$ scripts/setup-domain.sh https://[yourdomain.com]
-```
-
-Open the web application via https://[yourdomain.com]/serverless/web.
-
-# Credits
+## Credits
 
 This repository is based on a repository [https://github.com/nheidloff/serverless-web-application-ibm-cloud](https://github.com/nheidloff/serverless-web-application-ibm-cloud).   It has been heavily modified for our educational use case.
 
