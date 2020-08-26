@@ -45,7 +45,8 @@ function setup() {
   ibmcloud fn property set --namespace ${FN_NAMESPACE}
   
   _out Deploying function ${FN_SAMPLE_PACKAGE=}/html
-
+  
+  _out COS_URL_HOME_BASE=${COS_URL_HOME_BASE}
   cp ${root_folder}/../function-html/function-html.template.js ${root_folder}/../function-html/function-html.js
   npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../function-html/function-html.js xxx-replace-me-xxx $COS_URL_HOME_BASE
 

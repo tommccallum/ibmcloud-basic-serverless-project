@@ -71,41 +71,53 @@ function setup() {
   npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../angular/dist/index.html src=\" src=\"${BUCKET_URL}
 
   _out Uploading static web application resources
-  curl -X "PUT" "${BUCKET_URL}/index.html" \
-    -H "x-amz-acl: public-read" \
-    -H "Authorization: Bearer ${IAM_TOKEN}" \
-    -H "Content-Type: text/html; charset=utf-8" \
-    --upload-file "${root_folder}/../angular/dist/index.html"
+  for local_file in $( find ${root_folder}/../angular/dist -maxdepth 1 -type f )
+  do
+    base=$(basename "$local_file")
+    _out "Uploading angular/dist/${base}"
+    curl -X "PUT" "${BUCKET_URL}/${base}" \
+        -H "x-amz-acl: public-read" \
+        -H "Authorization: Bearer ${IAM_TOKEN}" \
+        -H "Content-Type: text/plain; charset=utf-8" \
+        --upload-file "${local_file}"
+  done
 
-  curl -X "PUT" "${BUCKET_URL}/inline.bundle.js" \
-    -H "x-amz-acl: public-read" \
-    -H "Authorization: Bearer ${IAM_TOKEN}" \
-    -H "Content-Type: text/plain; charset=utf-8" \
-    --upload-file "${root_folder}/../angular/dist/inline.bundle.js"
+  # _out Uploading static web application resources
+  # curl -X "PUT" "${BUCKET_URL}/index.html" \
+  #   -H "x-amz-acl: public-read" \
+  #   -H "Authorization: Bearer ${IAM_TOKEN}" \
+  #   -H "Content-Type: text/html; charset=utf-8" \
+  #   --upload-file "${root_folder}/../angular/dist/index.html"
 
-  curl -X "PUT" "${BUCKET_URL}/polyfills.bundle.js" \
-     -H "x-amz-acl: public-read" \
-     -H "Authorization: Bearer ${IAM_TOKEN}" \
-     -H "Content-Type: text/plain; charset=utf-8" \
-     --upload-file "${root_folder}/../angular/dist/polyfills.bundle.js"
+  # curl -X "PUT" "${BUCKET_URL}/inline.bundle.js" \
+  #   -H "x-amz-acl: public-read" \
+  #   -H "Authorization: Bearer ${IAM_TOKEN}" \
+  #   -H "Content-Type: text/plain; charset=utf-8" \
+  #   --upload-file "${root_folder}/../angular/dist/inline.bundle.js"
 
-  curl -X "PUT" "${BUCKET_URL}/styles.bundle.js" \
-     -H "x-amz-acl: public-read" \
-     -H "Authorization: Bearer ${IAM_TOKEN}" \
-     -H "Content-Type: text/plain; charset=utf-8" \
-     --upload-file "${root_folder}/../angular/dist/styles.bundle.js"
+  # curl -X "PUT" "${BUCKET_URL}/polyfills.bundle.js" \
+  #    -H "x-amz-acl: public-read" \
+  #    -H "Authorization: Bearer ${IAM_TOKEN}" \
+  #    -H "Content-Type: text/plain; charset=utf-8" \
+  #    --upload-file "${root_folder}/../angular/dist/polyfills.bundle.js"
 
-  curl -X "PUT" "${BUCKET_URL}/main.bundle.js" \
-     -H "x-amz-acl: public-read" \
-     -H "Authorization: Bearer ${IAM_TOKEN}" \
-     -H "Content-Type: text/plain; charset=utf-8" \
-     --upload-file "${root_folder}/../angular/dist/main.bundle.js"
+  # curl -X "PUT" "${BUCKET_URL}/styles.bundle.js" \
+  #    -H "x-amz-acl: public-read" \
+  #    -H "Authorization: Bearer ${IAM_TOKEN}" \
+  #    -H "Content-Type: text/plain; charset=utf-8" \
+  #    --upload-file "${root_folder}/../angular/dist/styles.bundle.js"
 
-  curl -X "PUT" "${BUCKET_URL}/vendor.bundle.js" \
-     -H "x-amz-acl: public-read" \
-     -H "Authorization: Bearer ${IAM_TOKEN}" \
-     -H "Content-Type: text/plain; charset=utf-8" \
-     --upload-file "${root_folder}/../angular/dist/vendor.bundle.js"
+  # curl -X "PUT" "${BUCKET_URL}/main.bundle.js" \
+  #    -H "x-amz-acl: public-read" \
+  #    -H "Authorization: Bearer ${IAM_TOKEN}" \
+  #    -H "Content-Type: text/plain; charset=utf-8" \
+  #    --upload-file "${root_folder}/../angular/dist/main.bundle.js"
+
+  # curl -X "PUT" "${BUCKET_URL}/vendor.bundle.js" \
+  #    -H "x-amz-acl: public-read" \
+  #    -H "Authorization: Bearer ${IAM_TOKEN}" \
+  #    -H "Content-Type: text/plain; charset=utf-8" \
+  #    --upload-file "${root_folder}/../angular/dist/vendor.bundle.js"
 
   COS_URL_HOME_BASE=${BUCKET_URL}
   COS_URL_HOME="${COS_URL_HOME_BASE}/index.html"

@@ -16,7 +16,9 @@ var HeroesComponent = /** @class */ (function () {
         this.selectedHero = hero;
     };
     HeroesComponent.prototype.getHeroes = function () {
-        this.heroes = this.heroService.getHeroes();
+        var _this = this;
+        this.heroService.getHeroes()
+            .subscribe(function (heroes) { return _this.heroes = heroes; });
     };
     HeroesComponent.prototype.ngOnInit = function () {
         this.getHeroes();

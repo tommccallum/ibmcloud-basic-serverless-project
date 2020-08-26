@@ -1,5 +1,16 @@
-<h1>{{ title }}</h1>
-<ibm-serverless-login></ibm-serverless-login>
-<app-heroes></app-heroes>
-<lightswitch-comp></lightswitch-comp>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href='/'>{{title}}</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item" routerLinkActive="active" routerLinkActiveOptions="{exact:true}"><a class="nav-link" routerLink="/heroes">Angular Heroes Demo</a></li>
+      <li class="nav-item" routerLinkActive="active" routerLinkActiveOptions="{exact:true}"><a class="nav-link" routerLink="/lightswitch">Angular Lightswitch Demo</a></li>
+      <li class="nav-item" routerLinkActive="active" routerLinkActiveOptions="{exact:true}"><a class="nav-link" routerLink="/home">IBM Cloud Serverless Web App Demo</a></li>
+      <li class="nav-item" routerLinkActive="active" routerLinkActiveOptions="{exact:true}"><a class="nav-link" routerLink="/page-not-found">Page Not Found Demo</a></li>
+    </ul>
+  </div>
+</nav>
 <router-outlet></router-outlet>

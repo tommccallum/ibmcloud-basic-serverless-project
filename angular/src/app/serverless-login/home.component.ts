@@ -1,9 +1,12 @@
 
-import {map} from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Component } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Http, Headers, URLSearchParams, RequestOptions } from '@angular/http';
-import * as config from '../assets/config.json';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+//RequestOptions, XHRBackend
+// , URLSearchParams, RequestOptions 
+// Headers
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import config from '../../assets/config.json';
 import { Observable } from 'rxjs';
 import 'rxjs/Rx';
 // import { PipeTransform, Pipe } from '@angular/core';
@@ -33,12 +36,11 @@ export class HomeComponent {
   private accessToken: string;
   private refreshToken: string;
   private expiresIn: string;
-  private userName: string;
-  private resultOfProtectedAPI;
+  public userName: string;
+  public resultOfProtectedAPI: string;
   // private jsonResultOfProtectedAPI: JSON;
-  
-  onButtonLoginClicked(): void {
 
+  onButtonLoginClicked(): void {
     if (this.initialized == true) {
       let url = this.authorizationUrl + "?response_type=" + "code";
       url = url + "&client_id=" + this.clientId;
@@ -48,35 +50,41 @@ export class HomeComponent {
   }
 
   onButtonInvokeActionClicked(): void {
-
-    let headers = new Headers({
+    console.log("updated "+Math.random());
+    if (this.accessToken) console.log(this.accessToken)
+    if (this.refreshToken) console.log(this.refreshToken)
+    if (this.expiresIn) console.log(this.expiresIn)
+    if (this.userName) console.log(this.userName)
+    const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer ' + this.accessToken,
-      'X-Debug-Mode': true
+      'X-Debug-Mode': "true"
     });
-    let options = new RequestOptions({ headers: headers });
-
-    this.http.get(this.protectedUrl, options).pipe(
-      map(res => res.json()))
-      .subscribe(
-        result => {
-          console.log(result)
-          // this.jsonResultOfProtectedAPI = result;
-          this.resultOfProtectedAPI = JSON.stringify(result, null, 2);
-        },
-        err => {
-          console.error(err);
-          // this.jsonResultOfProtectedAPI = null;
-          this.resultOfProtectedAPI = JSON.stringify(err, null, 2);
-        });
+    const options = { headers: headers };
+    this.httpClient.get(this.protectedUrl, options)
+      .subscribe(result => this.resultOfProtectedAPI = JSON.stringify(result, null, 2), 
+                 error  => this.resultOfProtectedAPI = JSON.stringify(error , null, 2)
+                 );
+    //   map(res => res.json()))
+    //   .subscribe(
+    //     result => {
+    //       console.log(result)
+    //       // this.jsonResultOfProtectedAPI = result;
+    //       this.resultOfProtectedAPI = JSON.stringify(result, null, 2);
+    //     },
+    //     err => {
+    //       console.error(err);
+    //       // this.jsonResultOfProtectedAPI = null;
+    //       this.resultOfProtectedAPI = JSON.stringify(err, null, 2);
+    //     });
   }
 
   constructor(
     // Notice here that we create and initialise the class members
     // http, route and router all in one place.
     // This style is part of the typescript functionality.
-    private http: Http,
+    private httpClient: HttpClient,
     private route: ActivatedRoute,
     private router: Router) {
   }
@@ -92,14 +100,25 @@ export class HomeComponent {
 
     // Notice that we are getting parameters from the query string
     // that is anything after the question mark (?) in the url.
+    // We can use the this.route.snapshot method here to access
+    // the query parameters as we don't intend to modify them.
     this.accessToken = this.route.snapshot.queryParams["access_token"];
-    if (this.accessToken) console.log(this.accessToken)
     this.refreshToken = this.route.snapshot.queryParams["refresh_token"];
-    if (this.refreshToken) console.log(this.refreshToken)
     this.expiresIn = this.route.snapshot.queryParams["expires_in"];
-    if (this.expiresIn) console.log(this.expiresIn)
     this.userName = this.route.snapshot.queryParams["user_name"];
+    if (this.accessToken) console.log(this.accessToken)
+    if (this.refreshToken) console.log(this.refreshToken)
+    if (this.expiresIn) console.log(this.expiresIn)
     if (this.userName) console.log(this.userName)
+
+
+    // this.route.queryParams.subscribe(params => {
+    //   this.accessToken = params['access_token'];
+    //   this.refreshToken = params['refresh_token'];
+    //   this.expiresIn = params['expires_in'];
+    //   this.userName = params['user_name'];
+    // });
+   
   }
 
 }

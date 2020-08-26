@@ -12,7 +12,7 @@ var core_1 = require("@angular/core");
 // , URLSearchParams, RequestOptions 
 // Headers
 var http_1 = require("@angular/common/http");
-var config_json_1 = require("../assets/config.json");
+var config_json_1 = require("../../assets/config.json");
 require("rxjs/Rx");
 // import { PipeTransform, Pipe } from '@angular/core';
 // @Pipe({name: 'keys'})
@@ -46,6 +46,16 @@ var HomeComponent = /** @class */ (function () {
         }
     };
     HomeComponent.prototype.onButtonInvokeActionClicked = function () {
+        var _this = this;
+        console.log("updated " + Math.random());
+        if (this.accessToken)
+            console.log(this.accessToken);
+        if (this.refreshToken)
+            console.log(this.refreshToken);
+        if (this.expiresIn)
+            console.log(this.expiresIn);
+        if (this.userName)
+            console.log(this.userName);
         var headers = new http_1.HttpHeaders({
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -53,7 +63,8 @@ var HomeComponent = /** @class */ (function () {
             'X-Debug-Mode': "true"
         });
         var options = { headers: headers };
-        // this.httpClient.get(this.protectedUrl, options).pipe(
+        this.httpClient.get(this.protectedUrl, options)
+            .subscribe(function (result) { return _this.resultOfProtectedAPI = JSON.stringify(result, null, 2); }, function (error) { return _this.resultOfProtectedAPI = JSON.stringify(error, null, 2); });
         //   map(res => res.json()))
         //   .subscribe(
         //     result => {
@@ -80,17 +91,23 @@ var HomeComponent = /** @class */ (function () {
         // We can use the this.route.snapshot method here to access
         // the query parameters as we don't intend to modify them.
         this.accessToken = this.route.snapshot.queryParams["access_token"];
+        this.refreshToken = this.route.snapshot.queryParams["refresh_token"];
+        this.expiresIn = this.route.snapshot.queryParams["expires_in"];
+        this.userName = this.route.snapshot.queryParams["user_name"];
         if (this.accessToken)
             console.log(this.accessToken);
-        this.refreshToken = this.route.snapshot.queryParams["refresh_token"];
         if (this.refreshToken)
             console.log(this.refreshToken);
-        this.expiresIn = this.route.snapshot.queryParams["expires_in"];
         if (this.expiresIn)
             console.log(this.expiresIn);
-        this.userName = this.route.snapshot.queryParams["user_name"];
         if (this.userName)
             console.log(this.userName);
+        // this.route.queryParams.subscribe(params => {
+        //   this.accessToken = params['access_token'];
+        //   this.refreshToken = params['refresh_token'];
+        //   this.expiresIn = params['expires_in'];
+        //   this.userName = params['user_name'];
+        // });
     };
     HomeComponent = __decorate([
         core_1.Component({

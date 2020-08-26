@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-root',
@@ -8,5 +6,5 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = "Severless Basic Web Application"
+  title = "Demo"
 }

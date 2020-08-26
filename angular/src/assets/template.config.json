@@ -2,5 +2,7 @@
     "authorizationUrl": "xxx",
     "redirectUrl": "xxx",
     "clientId": "xxx",
-    "protectedUrl": "xxx"
+    "protectedUrl": "xxx",
+    "heroesUrl": "api/heroes",
+    "textfile": "assets/textfile.txt"
 }
