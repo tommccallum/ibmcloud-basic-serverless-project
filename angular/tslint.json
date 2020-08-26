@@ -11,11 +11,13 @@
       "check-space"
     ],
     "curly": true,
+    "deprecation": {
+      "severity": "warning"
+    },
     "eofline": true,
     "forin": true,
     "import-blacklist": [
-      true,
-      "rxjs"
+      true
     ],
     "import-spacing": true,
     "indent": [
