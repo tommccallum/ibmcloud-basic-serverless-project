@@ -50,11 +50,6 @@ export class HomeComponent {
   }
 
   onButtonInvokeActionClicked(): void {
-    console.log("updated "+Math.random());
-    if (this.accessToken) console.log(this.accessToken)
-    if (this.refreshToken) console.log(this.refreshToken)
-    if (this.expiresIn) console.log(this.expiresIn)
-    if (this.userName) console.log(this.userName)
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -66,18 +61,6 @@ export class HomeComponent {
       .subscribe(result => this.resultOfProtectedAPI = JSON.stringify(result, null, 2), 
                  error  => this.resultOfProtectedAPI = JSON.stringify(error , null, 2)
                  );
-    //   map(res => res.json()))
-    //   .subscribe(
-    //     result => {
-    //       console.log(result)
-    //       // this.jsonResultOfProtectedAPI = result;
-    //       this.resultOfProtectedAPI = JSON.stringify(result, null, 2);
-    //     },
-    //     err => {
-    //       console.error(err);
-    //       // this.jsonResultOfProtectedAPI = null;
-    //       this.resultOfProtectedAPI = JSON.stringify(err, null, 2);
-    //     });
   }
 
   constructor(
@@ -110,15 +93,6 @@ export class HomeComponent {
     if (this.refreshToken) console.log(this.refreshToken)
     if (this.expiresIn) console.log(this.expiresIn)
     if (this.userName) console.log(this.userName)
-
-
-    // this.route.queryParams.subscribe(params => {
-    //   this.accessToken = params['access_token'];
-    //   this.refreshToken = params['refresh_token'];
-    //   this.expiresIn = params['expires_in'];
-    //   this.userName = params['user_name'];
-    // });
-   
   }
 
 }
