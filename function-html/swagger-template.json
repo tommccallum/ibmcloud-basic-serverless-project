@@ -1,4 +1,4 @@
-{
+{ 
 	"swagger": "2.0",
 	"info": {
 		"version": "1.0",
@@ -13,12 +13,12 @@
 	"paths": {
 		"/web": {
 			"get": {
-				"operationId": "getAction",
+				"operationId": "getWeb",
 				"x-openwhisk": {
-					"namespace": "xxx-your-openwhisk-namespace-for-example:niklas_heidloff%40de.ibm.com_demo-xxx",
+					"namespace": "xxx-namespace-xxx",
 					"action": "html",
-					"package": "serverless-web-app-sample",
-					"url": "https://openwhisk.ng.bluemix.net/api/v1/web/xxx-your-openwhisk-namespace-for-example:niklas_heidloff%40de.ibm.com_demo-xxx/serverless-web-app-sample/html"
+					"package": "xxx-sample-package-xxx",
+					"url": "xxx-action-url-xxx"
 				},
 				"responses": {
 					"200": {
@@ -36,12 +36,12 @@
 						"case": [
 							{
 								"operations": [
-									"getAction"
+									"getWeb"
 								],
 								"execute": [
 									{
 										"invoke": {
-											"target-url": "https://openwhisk.ng.bluemix.net/api/v1/web/xxx-your-openwhisk-namespace-for-example:niklas_heidloff%40de.ibm.com_demo-xxx/serverless-web-app-sample/html",
+											"target-url": "xxx-action-url-xxx",
 											"verb": "keep"
 										}
 									}
@@ -58,6 +58,6 @@
 			"enabled": true
 		}
 	},
-	"basePath": "/serverless"
+	"basePath": "/xxx-api-basepath-xxx"
 }
 

@@ -15,6 +15,12 @@
 # limitations under the License.
 ##############################################################################
 
+##############################################################################
+# Updated and factored some of these scripts for our use case.
+# Heavily edited by: Tom McCallum
+##############################################################################
+
+
 root_folder=$(cd $(dirname $0); pwd)
 
 # SETUP logging (redirect stdout and stderr to a log file)
@@ -26,26 +32,7 @@ exec 3>&1 # Save stdout
 exec 4>&2 # Save stderr
 exec 1>$LOG_FILE 2>&1
 
-function _out() {
-  echo "$@" >&3
-  echo "$(date +'%F %H:%M:%S') $@"
-}
-
-function _err() {
-  echo "$@" >&4
-  echo "$(date +'%F %H:%M:%S') $@"
-}
-
-function check_tools() {
-    MISSING_TOOLS=""
-    git --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} git"
-    curl --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} curl"
-    ibmcloud --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} ibmcloud"    
-    if [[ -n "$MISSING_TOOLS" ]]; then
-      _err "Some tools (${MISSING_TOOLS# }) could not be found, please install them first and then run scripts/setup-app-id.sh"
-      exit 1
-    fi
-}
+source ${root_folder}/functions.sh
 
 function setup() {
   _out Downloading npm modules

@@ -17,6 +17,11 @@
 # Authors: Andrea Frittoli, Niklas Heidloff
 ##############################################################################
 
+##############################################################################
+# Updated and factored some of these scripts for our use case.
+# Heavily edited by: Tom McCallum
+##############################################################################
+
 root_folder=$(cd $(dirname $0); pwd)
 
 # SETUP logging (redirect stdout and stderr to a log file)
@@ -27,68 +32,49 @@ exec 3>&1 # Save stdout
 exec 4>&2 # Save stderr
 exec 1>$LOG_FILE 2>&1
 
-function _out() {
-  echo "$@" >&3
-  echo "$(date +'%F %H:%M:%S') $@"
-}
+source ${root_folder}/functions.sh
 
-function _err() {
-  echo "$@" >&4
-  echo "$(date +'%F %H:%M:%S') $@"
-}
 
-function check_tools() {
-    MISSING_TOOLS=""
-    git --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} git"
-    curl --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} curl"
-    ibmcloud --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} ibmcloud"    
-    if [[ -n "$MISSING_TOOLS" ]]; then
-      _err "Some tools (${MISSING_TOOLS# }) could not be found, please install them first and then run scripts/setup-app-id.sh"
-      exit 1
-    fi
-}
-
-function ibmcloud_login() {
-  # Skip version check updates
-  ibmcloud config --check-version=false
-
-  # Obtain the API endpoint from BLUEMIX_REGION and set it as default
-  _out Logging in to IBM cloud
-  ibmcloud api --unset
-  IBMCLOUD_API_ENDPOINT=$(ibmcloud api | awk '/'$BLUEMIX_REGION'/{ print $2 }')
-  ibmcloud api $IBMCLOUD_API_ENDPOINT
-
-  # Login to ibmcloud, generate .wskprops
-  ibmcloud login --apikey $IBMCLOUD_API_KEY -a $IBMCLOUD_API_ENDPOINT
-  ibmcloud target -o "$IBMCLOUD_ORG" -s "$IBMCLOUD_SPACE"
-  ibmcloud fn api list > /dev/null
-
-  # Show the result of login to stdout
-  ibmcloud target
-}
 
 function setup() {
   _out Creating App ID service instance
-  ibmcloud resource service-instance-create app-id-serverless appid lite $BLUEMIX_REGION
-  ibmcloud resource service-alias-delete app-id-serverless -f
-  ibmcloud resource service-alias-create app-id-serverless --instance-name app-id-serverless
+  RESOURCE_GROUP=$(ibmcloud target | awk '/Resource group:/{ print $2 }')
+  if [ "x$RESOURCE_GROUP" == "x" ]
+  then
+    _out Setting resource group to Default
+    ibmcloud target "Default"
+  fi
+  ibmcloud resource service-instance-create ${APP_ID} appid lite $BLUEMIX_REGION
+  
+  wait_for_service_to_become_active ${APP_ID}
+  
+  # TODO check if this resource alias exists and delete otherwise don't
+  # the problem is it creates an extra FAILED flag in our logs
+  ALIAS_EXISTS=$( ibmcloud resource service-aliases | grep ${APP_ID} | wc -l )
+  if [ ${ALIAS_EXISTS} -gt 0 ]
+  then
+    _out Deleting existing alias: ${APP_ID}
+    ibmcloud resource service-alias-delete ${APP_ID} -f
+  fi
+  _out Creating alias: ${APP_ID}
+  ibmcloud resource service-alias-create ${APP_ID} --instance-name ${APP_ID}
 
   _out Creating App ID credentials
-  ibmcloud resource service-key-create app-id-serverless-credentials Reader --instance-name app-id-serverless
-  ibmcloud resource service-key app-id-serverless-credentials
-  APPID_MGMTURL=$(ibmcloud resource service-key app-id-serverless-credentials | awk '/managementUrl/{ print $2 }')
+  ibmcloud resource service-key-create ${APP_ID}-credentials Reader --instance-name ${APP_ID}
+  ibmcloud resource service-key ${APP_ID}-credentials
+  APPID_MGMTURL=$(ibmcloud resource service-key ${APP_ID}-credentials | awk '/managementUrl/{ print $2 }')
   _out APPID_MGMTURL: $APPID_MGMTURL
   printf "\nAPPID_MGMTURL=$APPID_MGMTURL" >> $ENV_FILE
-  APPID_TENANTID=$(ibmcloud resource service-key app-id-serverless-credentials | awk '/tenantId/{ print $2 }')
+  APPID_TENANTID=$(ibmcloud resource service-key ${APP_ID}-credentials | awk '/tenantId/{ print $2 }')
   _out APPID_TENANTID: $APPID_TENANTID
   printf "\nAPPID_TENANTID=$APPID_TENANTID" >> $ENV_FILE
-  APPID_OAUTHURL=$(ibmcloud resource service-key app-id-serverless-credentials | awk '/oauthServerUrl/{ print $2 }')
+  APPID_OAUTHURL=$(ibmcloud resource service-key ${APP_ID}-credentials | awk '/oauthServerUrl/{ print $2 }')
   _out APPID_OAUTHURL: $APPID_OAUTHURL
   printf "\nAPPID_OAUTHURL=$APPID_OAUTHURL" >> $ENV_FILE
-  APPID_CLIENTID=$(ibmcloud resource service-key app-id-serverless-credentials | awk '/clientId/{ print $2 }')
+  APPID_CLIENTID=$(ibmcloud resource service-key ${APP_ID}-credentials | awk '/clientId/{ print $2 }')
   _out APPID_CLIENTID: $APPID_CLIENTID
   printf "\nAPPID_CLIENTID=$APPID_CLIENTID" >> $ENV_FILE
-  APPID_SECRET=$(ibmcloud resource service-key app-id-serverless-credentials | awk '/secret/{ print $2 }')
+  APPID_SECRET=$(ibmcloud resource service-key ${APP_ID}-credentials | awk '/secret/{ print $2 }')
   _out APPID_SECRET: $APPID_SECRET
   printf "\nAPPID_SECRET=$APPID_SECRET" >> $ENV_FILE
   
@@ -129,4 +115,4 @@ export TF_VAR_cloudant_plan=${IBMCLOUD_CLOUDANT_PLAN:-"Lite"}
 _out Full install output in $LOG_FILE
 ibmcloud_login
 setup $@
-esac
+

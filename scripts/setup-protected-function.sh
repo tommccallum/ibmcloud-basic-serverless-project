@@ -15,6 +15,12 @@
 # limitations under the License.
 ##############################################################################
 
+##############################################################################
+# Updated and factored some of these scripts for our use case.
+# Heavily edited by: Tom McCallum
+##############################################################################
+
+
 root_folder=$(cd $(dirname $0); pwd)
 
 # SETUP logging (redirect stdout and stderr to a log file)
@@ -26,49 +32,20 @@ exec 3>&1 # Save stdout
 exec 4>&2 # Save stderr
 exec 1>$LOG_FILE 2>&1
 
-function _out() {
-  echo "$@" >&3
-  echo "$(date +'%F %H:%M:%S') $@"
-}
-
-function _err() {
-  echo "$@" >&4
-  echo "$(date +'%F %H:%M:%S') $@"
-}
-
-function check_tools() {
-    MISSING_TOOLS=""
-    git --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} git"
-    curl --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} curl"
-    ibmcloud --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} ibmcloud"    
-    if [[ -n "$MISSING_TOOLS" ]]; then
-      _err "Some tools (${MISSING_TOOLS# }) could not be found, please install them first and then run scripts/setup-app-id.sh"
-      exit 1
-    fi
-}
-
-function ibmcloud_login() {
-  # Skip version check updates
-  ibmcloud config --check-version=false
-
-  # Obtain the API endpoint from BLUEMIX_REGION and set it as default
-  _out Logging in to IBM cloud
-  ibmcloud api --unset
-  IBMCLOUD_API_ENDPOINT=$(ibmcloud api | awk '/'$BLUEMIX_REGION'/{ print $2 }')
-  ibmcloud api $IBMCLOUD_API_ENDPOINT
-
-  # Login to ibmcloud, generate .wskprops
-  ibmcloud login --apikey $IBMCLOUD_API_KEY -a $IBMCLOUD_API_ENDPOINT
-  ibmcloud target -o "$IBMCLOUD_ORG" -s "$IBMCLOUD_SPACE"
-  ibmcloud fn api list > /dev/null
-
-  # Show the result of login to stdout
-  ibmcloud target
-}
+source ${root_folder}/functions.sh
 
 function setup() {
+  NS_EXISTS=$( ibmcloud fn namespace get ${FN_NAMESPACE} | grep "Entities in namespace" )
+  if [ "x$NS_EXISTS" == "x" ]
+  then
+    _out Setting namespace for protected function
+    ibmcloud fn namespace create ${FN_NAMESPACE} --description "Serverless Web App Sample"
+  fi
+  
+  ibmcloud fn property set --namespace ${FN_NAMESPACE}
+  
   _out Preparing deployment of the protected function
-  ibmcloud wsk package create serverless-web-app-sample
+  ibmcloud wsk package create ${FN_SAMPLE_PACKAGE}
 
   readonly CONFIG_FILE="${root_folder}/../function-protected/config.json"
   rm $CONFIG_FILE
@@ -85,20 +62,34 @@ function setup() {
 
   CONFIG=`cat $CONFIG_FILE`
 
-  _out Deploying function: serverless-web-app-sample/function-protected
-  ibmcloud wsk action create serverless-web-app-sample/function-protected ${root_folder}/../function-protected/function-protected.js --kind nodejs:8 -a web-export true -p config "${CONFIG}"
+  _out Deploying function: ${FN_SAMPLE_PACKAGE}/function-protected
+  ibmcloud wsk action create ${FN_SAMPLE_PACKAGE}/function-protected ${root_folder}/../function-protected/function-protected.js --kind nodejs:10 -a web-export true -p config "${CONFIG}"
 
   _out Downloading npm modules
   npm --prefix ${root_folder}/text-replace install ${root_folder}/text-replace
 
   _out Creating swagger-protected.json
   cp ${root_folder}/../function-protected/swagger-template.json ${root_folder}/../function-protected/swagger-protected.json
-  readonly NAMESPACE="${IBMCLOUD_ORG}_${IBMCLOUD_SPACE}"
-  npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../function-protected/swagger-protected.json xxx-your-openwhisk-namespace-for-example:niklas_heidloff%40de.ibm.com_demo-xxx $NAMESPACE
-  npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../function-protected/swagger-protected.json xxx-your-appid-tenantid-for-example:44d4f670-1e00-4ccb-98ad-3f03ba7e15a5-xxx $APPID_TENANTID
+  #readonly NAMESPACE="${IBMCLOUD_ORG}_${IBMCLOUD_SPACE}"
+  
+  readonly ACTION_NAMESPACE_AND_PACKAGE=$( ibmcloud fn action get ${FN_SAMPLE_PACKAGE}/function-protected | awk '/namespace/{print $2}' | sed "s/,//" | sed "s/\"//g" )
+  #readonly ACTION_URI=$( ibmcloud fn action list | grep "function-protected" | sed "s/^\///" )
+  readonly ACTION_NAMESPACE=$( echo "${ACTION_NAMESPACE_AND_PACKAGE}" | awk -F '/' '{print $1}' )
+  readonly ACTION_NAME="function-protected"
+  readonly ACTION_PRODUCES_EXT="json"
+  readonly ACTION_URL="${FUNCTION_PUBLIC_URL}/${ACTION_NAMESPACE_AND_PACKAGE}/${ACTION_NAME}.${ACTION_PRODUCES_EXT}"
 
+  _out ACTION_NAMESPACE: ${ACTION_NAMESPACE}
+  _out ACTION_URL: ${ACTION_URL}
+  
+  npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../function-protected/swagger-protected.json xxx-namespace-xxx ${ACTION_NAMESPACE}
+  npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../function-protected/swagger-protected.json xxx-action-url-xxx ${ACTION_URL}
+  npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../function-protected/swagger-protected.json xxx-tenantid-xxx ${APPID_TENANTID}
+  npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../function-protected/swagger-protected.json xxx-sample-package-xxx ${FN_SAMPLE_PACKAGE}
+  npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../function-protected/swagger-protected.json xxx-api-basepath-xxx $HIDDEN_API_BASEPATH
+  
   _out Deploying API: function-protected
-  API_PROTECTED=$(ibmcloud wsk api create --config-file ${root_folder}/../function-protected/swagger-protected.json | awk '/https:/{ print $1 }')
+  API_PROTECTED=$(ibmcloud wsk api create --config-file ${root_folder}/../function-protected/swagger-protected.json | awk '/https:/{ print $1 }' )
   _out API_PROTECTED: $API_PROTECTED
   printf "\nAPI_PROTECTED=$API_PROTECTED" >> $ENV_FILE
 }

@@ -17,6 +17,12 @@
 # Authors: Andrea Frittoli, Niklas Heidloff
 ##############################################################################
 
+##############################################################################
+# Updated and factored some of these scripts for our use case.
+# Heavily edited by: Tom McCallum
+##############################################################################
+
+
 root_folder=$(cd $(dirname $0); pwd)
 
 # SETUP logging (redirect stdout and stderr to a log file)
@@ -27,111 +33,89 @@ exec 3>&1 # Save stdout
 exec 4>&2 # Save stderr
 exec 1>$LOG_FILE 2>&1
 
-function _out() {
-  echo "$@" >&3
-  echo "$(date +'%F %H:%M:%S') $@"
-}
-
-function _err() {
-  echo "$@" >&4
-  echo "$(date +'%F %H:%M:%S') $@"
-}
-
-function check_tools() {
-    MISSING_TOOLS=""
-    git --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} git"
-    curl --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} curl"
-    ibmcloud --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} ibmcloud"    
-    if [[ -n "$MISSING_TOOLS" ]]; then
-      _err "Some tools (${MISSING_TOOLS# }) could not be found, please install them first and then run scripts/setup-app-id.sh"
-      exit 1
-    fi
-}
-
-function ibmcloud_login() {
-  # Skip version check updates
-  ibmcloud config --check-version=false
-
-  # Obtain the API endpoint from BLUEMIX_REGION and set it as default
-  _out Logging in to IBM cloud
-  ibmcloud api --unset
-  IBMCLOUD_API_ENDPOINT=$(ibmcloud api | awk '/'$BLUEMIX_REGION'/{ print $2 }')
-  ibmcloud api $IBMCLOUD_API_ENDPOINT
-
-  # Login to ibmcloud, generate .wskprops
-  ibmcloud login --apikey $IBMCLOUD_API_KEY -a $IBMCLOUD_API_ENDPOINT
-  ibmcloud target -o "$IBMCLOUD_ORG" -s "$IBMCLOUD_SPACE"
-  ibmcloud fn api list > /dev/null
-
-  # Show the result of login to stdout
-  ibmcloud target
-}
+source ${root_folder}/functions.sh
 
 function setup() {
   _out Creating Object Storage service instance
-  ibmcloud resource service-instance-create object-storage-serverless cloud-object-storage lite global
+  ibmcloud resource service-instance-create ${OBJECT_STORAGE} cloud-object-storage lite global
+  
+  wait_for_service_to_become_active ${OBJECT_STORAGE}
   
   _out Creating Object Storage credentials
-  ibmcloud resource service-key-create object-storage-serverless-credentials Reader --instance-name object-storage-serverless
+  ibmcloud resource service-key-create ${OBJECT_STORAGE}-credentials Reader --instance-name ${OBJECT_STORAGE}
   
   _out Creating bucket
   IAM_TOKEN=$(ibmcloud iam oauth-tokens | awk '/IAM/{ print $4 }')
   
-  COS_ID=$(ibmcloud resource service-instance object-storage-serverless | awk '/ID: /{ print $2 }')
+  COS_ID=$(ibmcloud resource service-instance ${OBJECT_STORAGE} --id | awk '/crn/{ print $2 }')
   _out COS_ID: $COS_ID
   printf "\nCOS_ID=$COS_ID" >> $ENV_FILE
-
-  BUCKET_NAME="serverlessweb-${APPID_TENANTID}"
+  
+  #_out Set crn in cos config
+  #ibmcloud cos config crn --crn $COS_ID
+  
+  # if we get bucket already exists, change this and it will change it throughout
+  BUCKET_NAME="${BUCKET_PREFIX}-${APPID_TENANTID}"
   _out BUCKET_NAME: $BUCKET_NAME
   printf "\nBUCKET_NAME=$BUCKET_NAME" >> $ENV_FILE
-  curl -X "PUT" "https://s3.us-south.objectstorage.softlayer.net/${BUCKET_NAME}" \
-    -H "Authorization: Bearer ${IAM_TOKEN}" \
-    -H "ibm-service-instance-id: ${COS_ID}"
+  ibmcloud cos create-bucket --bucket "${BUCKET_NAME}" --ibm-service-instance-id ${COS_ID} --region ${BLUEMIX_REGION}
+  if [ $? -ne 0 ]
+  then
+    _err Failed to create new bucket called ${BUCKET_NAME}
+  fi
+#   curl -X "PUT" "https://s3.us-south.objectstorage.softlayer.net/${BUCKET_NAME}" \
+#     -H "Authorization: Bearer ${IAM_TOKEN}" \
+#     -H "ibm-service-instance-id: ${COS_ID}"
 
+    
   _out Building Angular application
   cd ${root_folder}/../angular
   ng build
 
-  npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../angular/dist/index.html src=\" src=\"https://s3.us-south.objectstorage.softlayer.net/${BUCKET_NAME}/
+  #npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../angular/dist/index.html src=\" src=\"https://s3.${BLUEMIX_REGION}.objectstorage.softlayer.net/${BUCKET_NAME}/
+  OBJECT_URL="cloud-object-storage.appdomain.cloud"
+  BUCKET_URL="https://s3.${BLUEMIX_REGION}.${OBJECT_URL}/${BUCKET_NAME}"
+  _out BUCKET_URL: $BUCKET_URL
+  npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../angular/dist/index.html src=\" src=\"${BUCKET_URL}
 
   _out Uploading static web application resources
-  curl -X "PUT" "https://s3.us-south.objectstorage.softlayer.net/${BUCKET_NAME}/index.html" \
+  curl -X "PUT" "${BUCKET_URL}/index.html" \
     -H "x-amz-acl: public-read" \
     -H "Authorization: Bearer ${IAM_TOKEN}" \
     -H "Content-Type: text/html; charset=utf-8" \
     --upload-file "${root_folder}/../angular/dist/index.html"
 
-  curl -X "PUT" "https://s3.us-south.objectstorage.softlayer.net/${BUCKET_NAME}/inline.bundle.js" \
+  curl -X "PUT" "${BUCKET_URL}/inline.bundle.js" \
     -H "x-amz-acl: public-read" \
     -H "Authorization: Bearer ${IAM_TOKEN}" \
     -H "Content-Type: text/plain; charset=utf-8" \
     --upload-file "${root_folder}/../angular/dist/inline.bundle.js"
 
-  curl -X "PUT" "https://s3.us-south.objectstorage.softlayer.net/${BUCKET_NAME}/polyfills.bundle.js" \
+  curl -X "PUT" "${BUCKET_URL}/polyfills.bundle.js" \
      -H "x-amz-acl: public-read" \
      -H "Authorization: Bearer ${IAM_TOKEN}" \
      -H "Content-Type: text/plain; charset=utf-8" \
      --upload-file "${root_folder}/../angular/dist/polyfills.bundle.js"
 
-  curl -X "PUT" "https://s3.us-south.objectstorage.softlayer.net/${BUCKET_NAME}/styles.bundle.js" \
+  curl -X "PUT" "${BUCKET_URL}/styles.bundle.js" \
      -H "x-amz-acl: public-read" \
      -H "Authorization: Bearer ${IAM_TOKEN}" \
      -H "Content-Type: text/plain; charset=utf-8" \
      --upload-file "${root_folder}/../angular/dist/styles.bundle.js"
 
-  curl -X "PUT" "https://s3.us-south.objectstorage.softlayer.net/${BUCKET_NAME}/main.bundle.js" \
+  curl -X "PUT" "${BUCKET_URL}/main.bundle.js" \
      -H "x-amz-acl: public-read" \
      -H "Authorization: Bearer ${IAM_TOKEN}" \
      -H "Content-Type: text/plain; charset=utf-8" \
      --upload-file "${root_folder}/../angular/dist/main.bundle.js"
 
-  curl -X "PUT" "https://s3.us-south.objectstorage.softlayer.net/${BUCKET_NAME}/vendor.bundle.js" \
+  curl -X "PUT" "${BUCKET_URL}/vendor.bundle.js" \
      -H "x-amz-acl: public-read" \
      -H "Authorization: Bearer ${IAM_TOKEN}" \
      -H "Content-Type: text/plain; charset=utf-8" \
      --upload-file "${root_folder}/../angular/dist/vendor.bundle.js"
 
-  COS_URL_HOME_BASE="https://s3.us-south.objectstorage.softlayer.net/${BUCKET_NAME}"
+  COS_URL_HOME_BASE=${BUCKET_URL}
   COS_URL_HOME="${COS_URL_HOME_BASE}/index.html"
   printf "\nCOS_URL_HOME=$COS_URL_HOME" >> $ENV_FILE
   printf "\nCOS_URL_HOME_BASE=$COS_URL_HOME_BASE" >> $ENV_FILE

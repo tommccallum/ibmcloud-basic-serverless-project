@@ -18,10 +18,10 @@
 			"get": {
 				"operationId": "getAction",
 				"x-openwhisk": {
-					"namespace": "xxx-your-openwhisk-namespace-for-example:niklas_heidloff%40de.ibm.com_demo-xxx",
+					"namespace": "xxx-namespace-xxx",
 					"action": "function-protected",
-					"package": "serverless-web-app-sample",
-					"url": "https://openwhisk.ng.bluemix.net/api/v1/web/xxx-your-openwhisk-namespace-for-example:niklas_heidloff%40de.ibm.com_demo-xxx/serverless-web-app-sample/function-protected.json"
+					"package": "xxx-sample-package-xxx",
+					"url": "xxx-action-url-xxx"
 				},
 				"responses": {
 					"200": {
@@ -44,7 +44,7 @@
 								"execute": [
 									{
 										"invoke": {
-											"target-url": "https://openwhisk.ng.bluemix.net/api/v1/web/xxx-your-openwhisk-namespace-for-example:niklas_heidloff%40de.ibm.com_demo-xxx/serverless-web-app-sample/function-protected.json",
+											"target-url": "xxx-action-url-xxx",
 											"verb": "keep"
 										}
 									}
@@ -61,7 +61,7 @@
 			"enabled": true
 		}
 	},
-	"basePath": "/path",
+	"basePath": "/xxx-api-basepath-xxx",
 	"securityDefinitions": {
 		"app-id": {
 			"flow": "application",
@@ -70,7 +70,7 @@
 			"x-provider": {
 				"name": "app-id",
 				"params": {
-					"tenantId": "xxx-your-appid-tenantid-for-example:44d4f670-1e00-4ccb-98ad-3f03ba7e15a5-xxx"
+					"tenantId": "xxx-tenantid-xxx"
 				}
 			},
 			"x-tokenintrospect": {
@@ -80,7 +80,6 @@
 	},
 	"security": [
 		{
-			"$$label": "client_id",
 			"app-id": []
 		}
 	]

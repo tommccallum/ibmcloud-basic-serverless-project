@@ -15,6 +15,12 @@
 # limitations under the License.
 ##############################################################################
 
+##############################################################################
+# Updated and factored some of these scripts for our use case.
+# Heavily edited by: Tom McCallum
+##############################################################################
+
+
 root_folder=$(cd $(dirname $0); pwd)
 
 # SETUP logging (redirect stdout and stderr to a log file)
@@ -26,49 +32,21 @@ exec 3>&1 # Save stdout
 exec 4>&2 # Save stderr
 exec 1>$LOG_FILE 2>&1
 
-function _out() {
-  echo "$@" >&3
-  echo "$(date +'%F %H:%M:%S') $@"
-}
-
-function _err() {
-  echo "$@" >&4
-  echo "$(date +'%F %H:%M:%S') $@"
-}
-
-function check_tools() {
-    MISSING_TOOLS=""
-    git --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} git"
-    curl --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} curl"
-    ibmcloud --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} ibmcloud"    
-    if [[ -n "$MISSING_TOOLS" ]]; then
-      _err "Some tools (${MISSING_TOOLS# }) could not be found, please install them first and then run scripts/setup-app-id.sh"
-      exit 1
-    fi
-}
-
-function ibmcloud_login() {
-  # Skip version check updates
-  ibmcloud config --check-version=false
-
-  # Obtain the API endpoint from BLUEMIX_REGION and set it as default
-  _out Logging in to IBM cloud
-  ibmcloud api --unset
-  IBMCLOUD_API_ENDPOINT=$(ibmcloud api | awk '/'$BLUEMIX_REGION'/{ print $2 }')
-  ibmcloud api $IBMCLOUD_API_ENDPOINT
-
-  # Login to ibmcloud, generate .wskprops
-  ibmcloud login --apikey $IBMCLOUD_API_KEY -a $IBMCLOUD_API_ENDPOINT
-  ibmcloud target -o "$IBMCLOUD_ORG" -s "$IBMCLOUD_SPACE"
-  ibmcloud fn api list > /dev/null
-
-  # Show the result of login to stdout
-  ibmcloud target
-}
+source ${root_folder}/functions.sh
 
 function setup() {
+  NS_EXISTS=$( ibmcloud fn namespace get ${FN_NAMESPACE} | grep "Entities in namespace" )
+  if [ "x$NS_EXISTS" == "x" ]
+  then
+    _out Setting namespace for protected function
+    ibmcloud fn namespace create ${FN_NAMESPACE} --description "Serverless Web App Sample"
+  fi
+  
+  ibmcloud fn property set --namespace ${FN_NAMESPACE}
+  
   _out Preparing deployment of two functions and a sequence
-  ibmcloud wsk package create serverless-web-app-generic
+  _out Creating package: ${FN_GENERIC_PACKAGE}
+  ibmcloud wsk package create ${FN_GENERIC_PACKAGE}
 
   readonly CONFIG_FILE="${root_folder}/../function-login/config.json"
   rm $CONFIG_FILE
@@ -91,29 +69,42 @@ function setup() {
 
   CONFIG=`cat $CONFIG_FILE`
 
-  _out Deploying function: serverless-web-app-generic/login
-  ibmcloud wsk action create serverless-web-app-generic/login ${root_folder}/../function-login/login.js --kind nodejs:8 -p config "${CONFIG}"
+  _out Deploying function: ${FN_GENERIC_PACKAGE}/login
+  ibmcloud wsk action create ${FN_GENERIC_PACKAGE}/login ${root_folder}/../function-login/login.js --kind nodejs:10 -p config "${CONFIG}"
 
-  _out Deploying function: serverless-web-app-generic/redirect
-  ibmcloud wsk action update serverless-web-app-generic/redirect ${root_folder}/../function-login/redirect.js --kind nodejs:8 -a web-export true -p config "${CONFIG}"
+  _out Deploying function: ${FN_GENERIC_PACKAGE}/redirect
+  ibmcloud wsk action update ${FN_GENERIC_PACKAGE}/redirect ${root_folder}/../function-login/redirect.js --kind nodejs:10 -a web-export true -p config "${CONFIG}"
 
-  _out Deploying sequence: serverless-web-app-generic/login-and-redirect
-  ibmcloud wsk action update --sequence serverless-web-app-generic/login-and-redirect serverless-web-app-generic/login,serverless-web-app-generic/redirect -a web-export true 
+  _out Deploying sequence: ${FN_GENERIC_PACKAGE}/login-and-redirect
+  ibmcloud wsk action update --sequence ${FN_GENERIC_PACKAGE}/login-and-redirect ${FN_GENERIC_PACKAGE}/login,${FN_GENERIC_PACKAGE}/redirect -a web-export true 
 
   _out Downloading npm modules
   npm --prefix ${root_folder}/text-replace install ${root_folder}/text-replace
 
   _out Creating swagger-login.json
   cp ${root_folder}/../function-login/swagger-template.json ${root_folder}/../function-login/swagger-login.json
-  readonly NAMESPACE="${IBMCLOUD_ORG}_${IBMCLOUD_SPACE}"
-  npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../function-login/swagger-login.json xxx-your-openwhisk-namespace-for-example:niklas_heidloff%40de.ibm.com_demo-xxx $NAMESPACE
+  
+  readonly ACTION_NAMESPACE_AND_PACKAGE=$( ibmcloud fn action get ${FN_GENERIC_PACKAGE}/login-and-redirect | awk '/namespace/{print $2}' | sed "s/,//" | sed "s/\"//g" )
+  readonly ACTION_NAMESPACE=$( echo "${ACTION_NAMESPACE_AND_PACKAGE}" | awk -F '/' '{print $1}' )
+  readonly ACTION_URI=$( ibmcloud fn action list | grep "login-and-redirect" | awk '{print $1}' | sed "s/^\///" )
+  readonly NAMESPACE="${ACTION_NAMESPACE}"
+  readonly ACTION_NAME="login-and-redirect"
+  readonly ACTION_URL="${FUNCTION_PUBLIC_URL}/${ACTION_NAMESPACE_AND_PACKAGE}/${ACTION_NAME}"
 
+  _out ACTION_NAMESPACE: $ACTION_NAMESPACE
+  _out ACTION_URL: $ACTION_URL
+  
+  npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../function-login/swagger-login.json xxx-namespace-xxx ${NAMESPACE}
+  npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../function-login/swagger-login.json xxx-generic-package-xxx ${FN_GENERIC_PACKAGE}
+  npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../function-login/swagger-login.json xxx-action-url-xxx $ACTION_URL
+  npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../function-login/swagger-login.json xxx-api-basepath-xxx $LOGIN_API_BASEPATH
+  
   _out Deploying API: login
   API_LOGIN=$(ibmcloud wsk api create --config-file ${root_folder}/../function-login/swagger-login.json | awk '/https:/{ print $1 }')
   _out API_LOGIN: $API_LOGIN
   printf "\nAPI_LOGIN=$API_LOGIN" >> $ENV_FILE
 
-  _out Updating function: serverless-web-app-generic/login
+  _out Updating function: ${FN_GENERIC_PACKAGE}/login
   rm $CONFIG_FILE
   touch $CONFIG_FILE
   printf "{\n" >> $CONFIG_FILE
@@ -134,7 +125,7 @@ function setup() {
   printf "\"\n" >> $CONFIG_FILE
   printf "}" >> $CONFIG_FILE
   CONFIG=`cat $CONFIG_FILE`
-  ibmcloud wsk action update serverless-web-app-generic/login ${root_folder}/../function-login/login.js --kind nodejs:8 -p config "${CONFIG}"
+  ibmcloud wsk action update ${FN_GENERIC_PACKAGE}/login ${root_folder}/../function-login/login.js --kind nodejs:10 -p config "${CONFIG}"
 
   _out Creating redirect URL in App ID: $API_LOGIN
   IBMCLOUD_BEARER_TOKEN=$(ibmcloud iam oauth-tokens | awk '/IAM/{ print $3" "$4 }')

@@ -29,22 +29,26 @@ Find out more about the main components:
 
 ## Outline
 
-* [Prerequisites](#prerequisites)
-* [Local Environment Setup](#local-environment-setup)
-* [App ID Setup](#app-id-setup)
-* [Cloudant Setup](#cloudant-setup)
-* [Cloud Functions Setup for Login](#cloud-functions-setup-for-login)
-* [Cloud Functions Setup for protected API](#cloud-functions-setup-for-protected-api)
-* [Setup of local Web Application](#setup-of-local-web-application)
-* [Cloud Object Storage Setup](#cloud-object-storage-setup)
-* [Cloud Functions Setup for HTML Function](#cloud-functions-setup-for-html-function)
-* [Custom Domain Setup](#custom-domain-setup) (optional)
+- [Serverless Web Applications on the IBM Cloud](#serverless-web-applications-on-the-ibm-cloud)
+  - [Outline](#outline)
+  - [Prerequisites](#prerequisites)
+- [Installing Angular CLI (ng)](#installing-angular-cli-ng)
+  - [Local Environment Setup](#local-environment-setup)
+  - [App ID Setup](#app-id-setup)
+  - [Cloudant Setup](#cloudant-setup)
+  - [Cloud Functions Setup for Login](#cloud-functions-setup-for-login)
+  - [Cloud Functions Setup for protected API](#cloud-functions-setup-for-protected-api)
+  - [Setup of local Web Application](#setup-of-local-web-application)
+  - [Cloud Object Storage Setup](#cloud-object-storage-setup)
+  - [Cloud Functions Setup for HTML Function](#cloud-functions-setup-for-html-function)
+  - [Custom Domain Setup](#custom-domain-setup)
+- [Credits](#credits)
 
 ## Prerequisites
 
 Create an IBM Cloud lite account (free, no credit card required):
 
-* [IBM Cloud account](https://ibm.biz/nheidloff)
+* You will require an Academic Initiative account from your institution.
 
 Make sure you have the following tools installed:
 
@@ -54,13 +58,21 @@ Make sure you have the following tools installed:
 * [curl](https://curl.haxx.se/download.html)
 * [ng](https://github.com/angular/angular-cli/wiki) (only needed for the Angular sample application)
 
+This assumes you are running a version of Linux or similar.
+
+# Installing Angular CLI (ng)
+
+```
+sudo npm install -g @angular/cli
+```
+
 ## Local Environment Setup
 
 Invoke the following commands:
 
 ```
-$ git clone https://github.com/nheidloff/serverless-web-application-ibm-cloud.git
-$ cd serverless-web-application-ibm-cloud
+$ git clone git@github.com:tommccallum/ibmcloud-basic-serverless-project.git
+$ cd serverless-basic-serverless-project
 $ ibmcloud login
 $ ibmcloud target --cf
 $ ibmcloud iam api-key-create serverless-web-application \
@@ -216,3 +228,7 @@ $ scripts/setup-domain.sh https://[yourdomain.com]
 ```
 
 Open the web application via https://[yourdomain.com]/serverless/web.
+
+# Credits
+
+This repository is based on a repository [https://github.com/nheidloff/serverless-web-application-ibm-cloud](https://github.com/nheidloff/serverless-web-application-ibm-cloud).   It has been heavily modified for our educational use case.

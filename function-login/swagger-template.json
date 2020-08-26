@@ -1,6 +1,6 @@
 {
     "swagger": "2.0",
-    "basePath": "/login",
+    "basePath": "/xxx-api-basepath-xxx",
     "info": {
         "title": "login",
         "version": "1.0"
@@ -16,9 +16,9 @@
                 },
                 "x-openwhisk": {
                     "action": "login-and-redirect",
-                    "namespace": "xxx-your-openwhisk-namespace-for-example:niklas_heidloff%40de.ibm.com_demo-xxx",
-                    "package": "serverless-web-app-generic",
-                    "url": "https://openwhisk.ng.bluemix.net/api/v1/web/xxx-your-openwhisk-namespace-for-example:niklas_heidloff%40de.ibm.com_demo-xxx/serverless-web-app-generic/login-and-redirect"
+                    "namespace": "xxx-namespace-xxx",
+                    "package": "xxx-generic-package-xxx",
+                    "url": "xxx-action-url-xxx"
                 }
             }
         }
@@ -43,7 +43,7 @@
                                     },
                                     {
                                         "invoke": {
-                                            "target-url": "https://openwhisk.ng.bluemix.net/api/v1/web/xxx-your-openwhisk-namespace-for-example:niklas_heidloff%40de.ibm.com_demo-xxx/serverless-web-app-generic/login-and-redirect",
+                                            "target-url": "xxx-action-url-xxx",
                                             "verb": "keep"
                                         }
                                     }

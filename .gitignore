@@ -28,3 +28,7 @@ angular/src/assets/config.json
 angular/dist
 function-html/function-html.js
 function-html/swagger.json
+serverlessweb-*.json
+*.bak
+package-lock.json
+node_modules/
