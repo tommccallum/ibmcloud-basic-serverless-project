@@ -10,14 +10,7 @@ This diagram describes the architecture with the main components:
 
 ![alt text](documentation/serverless-web-app.png "architecture diagram")
 
-Check out my blogs and screenshots for more details:
 
-* [Developing Serverless Web Applications on the IBM Cloud](http://heidloff.net/article/serverless-web-applications-ibm)
-* [Hosting Resources for Web Applications on the IBM Cloud](http://heidloff.net/article/hosting-static-web-resources-ibm-cloud)
-* [Authentication of Users in Serverless Applications](http://heidloff.net/article/user-authentication-serverless-openwhisk)
-* [User Authorization in Serverless Web Applications](http://heidloff.net/article/user-authorization-serverless-web-applications-openwhisk)
-* [Screenshots](documentation/serverless-web-apps.pdf)
-* Short [video](documentation/serverless-web-app.mp4) of the Angular application
 
 Find out more about the main components:
 
@@ -32,8 +25,9 @@ Find out more about the main components:
 - [Serverless Web Applications on the IBM Cloud](#serverless-web-applications-on-the-ibm-cloud)
   - [Outline](#outline)
   - [Prerequisites](#prerequisites)
-- [Installing Angular CLI (ng)](#installing-angular-cli-ng)
+  - [Installing Angular CLI (ng)](#installing-angular-cli-ng)
   - [Local Environment Setup](#local-environment-setup)
+  - [To remove all services](#to-remove-all-services)
   - [App ID Setup](#app-id-setup)
   - [Cloudant Setup](#cloudant-setup)
   - [Cloud Functions Setup for Login](#cloud-functions-setup-for-login)
@@ -52,6 +46,7 @@ Create an IBM Cloud lite account (free, no credit card required):
 
 Make sure you have the following tools installed:
 
+* Install the helper scripts available from [IBM Cloud Scripts](https://github.com/tommccallum/ibmcloud-scripts) 
 * [git](https://git-scm.com/downloads)
 * [ibmcloud CLI](https://console.bluemix.net/docs/cli/index.html)
 * [node](https://nodejs.org/en/download/)
@@ -60,7 +55,7 @@ Make sure you have the following tools installed:
 
 This assumes you are running a version of Linux or similar.
 
-# Installing Angular CLI (ng)
+## Installing Angular CLI (ng)
 
 ```
 sudo npm install -g @angular/cli
@@ -73,16 +68,14 @@ Invoke the following commands:
 ```
 $ git clone git@github.com:tommccallum/ibmcloud-basic-serverless-project.git
 $ cd serverless-basic-serverless-project
-$ ibmcloud login
-$ ibmcloud target --cf
-$ ibmcloud iam api-key-create serverless-web-application \
-  -d "serverless-web-application" \
-  --file serverless-web-application.json
-$ cat serverless-web-application.json
-$ cp template.local.env local.env
+$ ibm_login.sh
+$ ./build_all.sh
 ```
+## To remove all services
 
-In [local.env](local.env) define 'IBMCLOUD_API_KEY', 'IBMCLOUD_ORG', 'IBMCLOUD_SPACE' and 'BLUEMIX_REGION' to match the apikey in [serverless-web-application.json](serverless-web-application.json) and the org, space and region name that you're using (see the outputs in your terminal when following the steps above).
+```
+./delete-resources.sh
+```
 
 ## App ID Setup
 
@@ -232,3 +225,12 @@ Open the web application via https://[yourdomain.com]/serverless/web.
 # Credits
 
 This repository is based on a repository [https://github.com/nheidloff/serverless-web-application-ibm-cloud](https://github.com/nheidloff/serverless-web-application-ibm-cloud).   It has been heavily modified for our educational use case.
+
+Check out Neil's blogs and screenshots for more details:
+
+* [Developing Serverless Web Applications on the IBM Cloud](http://heidloff.net/article/serverless-web-applications-ibm)
+* [Hosting Resources for Web Applications on the IBM Cloud](http://heidloff.net/article/hosting-static-web-resources-ibm-cloud)
+* [Authentication of Users in Serverless Applications](http://heidloff.net/article/user-authentication-serverless-openwhisk)
+* [User Authorization in Serverless Web Applications](http://heidloff.net/article/user-authorization-serverless-web-applications-openwhisk)
+* [Screenshots](documentation/serverless-web-apps.pdf)
+* Short [video](documentation/serverless-web-app.mp4) of the Angular application

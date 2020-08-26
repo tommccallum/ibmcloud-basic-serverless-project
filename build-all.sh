@@ -14,19 +14,21 @@ function run() {
   fi
 }
 
-MODIFIED=$( grep "APPID_MGMTURL" local.env | wc -l )
-if [ $MODIFIED -eq 0 ]
-then
-  echo "Saving local.env"
-  cp local.env local.env.bak
-else
-  source local.env.bak
-  VERSION=$((VERSION+1))
-  sed -i "s/VERSION=[0-9]*/VERSION=${VERSION}/" local.env.bak
+source local.env.template
+VERSION=$((VERSION+1))
+sed -i "s/VERSION=[0-9]*/VERSION=${VERSION}/" local.env.template
 
-  echo "Restoring local.env"
-  cp local.env.bak local.env
-fi
+echo "Restoring local.env"
+cp local.env.template local.env
+IBMCLOUD_ORG=$(ibmcloud target | awk '/Org/{print $2}')
+IBMCLOUD_SPACE=$( ibmcloud target | awk '/Space/{print $2}' )
+BLUEMIX_REGION=$( ibmcloud target | awk '/Region/{print $2}' )
+echo "IBMCLOUD_ORG=\"${IBMCLOUD_ORG}\"" >> local.env
+echo "IBMCLOUD_SPACE=\"${IBMCLOUD_SPACE}\"" >> local.env
+echo "BLUEMIX_REGION=\"${BLUEMIX_REGION}\"" >> local.env
+echo "FUNCTION_PUBLIC_URL=\"https://${BLUEMIX_REGION}.functions.appdomain.cloud/api/v1/web\"" >> local.env
+
+
 source local.env
 echo "Using version ${VERSION}"
 
