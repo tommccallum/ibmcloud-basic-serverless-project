@@ -31,6 +31,8 @@ Find out more about the main components:
   - [When things go wrong...](#when-things-go-wrong)
   - [Run locally](#run-locally)
   - [What does what?](#what-does-what)
+  - [When editing the app itself...](#when-editing-the-app-itself)
+  - [Ideas for further exercises](#ideas-for-further-exercises)
   - [Credits](#credits)
 
 ## Prerequisites
@@ -112,6 +114,24 @@ Open http://localhost:4200 in your browser.
 * the _node_modules_ directory is where npm caches its files and will be created upon build.
 * the _scripts_ contains all the build scripts for the various services this project uses.
 * the _local.env_ file is created for each new build and contains the environment variables for the bash scripts in _scripts_ directory.
+
+## When editing the app itself...
+
+When modifying the app code we recommand that you run the following before running ./build_all.sh.  Edit it in small chunks that can be added/removed easily.  Make sure you add new tests to check that your new additions do what you think they do!
+
+```
+cd angular
+ng build
+ng test
+```
+
+
+## Ideas for further exercises
+
+* If you are unfamiliar with Angular, create a new project using ```ng new``` and compare the file outputs to the angular directory in this project.  What has been added and removed, why?
+
+* Add addition public and private pages to the application.
+
 
 
 ## Credits

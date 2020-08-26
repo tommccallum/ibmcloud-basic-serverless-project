@@ -8,5 +8,5 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-
+  title = "Severless Basic Web Application"
 }
