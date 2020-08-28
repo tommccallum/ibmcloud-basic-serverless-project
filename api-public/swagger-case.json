@@ -1,0 +1,78 @@
+{
+    "operations": [
+        "getAngular"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/31a5de2e-fcbf-4a96-ab2c-188783dd8537/serverlessweb-50-pkg-public/angular.html",
+                "verb": "keep"
+            }
+        }
+    ]
+},
+{
+    "operations": [
+        "getReactwebapp"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/31a5de2e-fcbf-4a96-ab2c-188783dd8537/serverlessweb-50-pkg-public/reactwebapp.html",
+                "verb": "keep"
+            }
+        }
+    ]
+},
+{
+    "operations": [
+        "getLaravelwebapp"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/31a5de2e-fcbf-4a96-ab2c-188783dd8537/serverlessweb-50-pkg-public/laravelwebapp.html",
+                "verb": "keep"
+            }
+        }
+    ]
+},
+{
+    "operations": [
+        "getFlaskwebapp"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/31a5de2e-fcbf-4a96-ab2c-188783dd8537/serverlessweb-50-pkg-public/flaskwebapp.html",
+                "verb": "keep"
+            }
+        }
+    ]
+},
+{
+    "operations": [
+        "getDjangowebapp"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/31a5de2e-fcbf-4a96-ab2c-188783dd8537/serverlessweb-50-pkg-public/djangowebapp.html",
+                "verb": "keep"
+            }
+        }
+    ]
+},
+{
+    "operations": [
+        "getDemo"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/31a5de2e-fcbf-4a96-ab2c-188783dd8537/serverlessweb-50-pkg-public/demo.html",
+                "verb": "keep"
+            }
+        }
+    ]
+}

@@ -8,32 +8,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.HomeComponent = void 0;
 var core_1 = require("@angular/core");
-//RequestOptions, XHRBackend
-// , URLSearchParams, RequestOptions 
-// Headers
 var http_1 = require("@angular/common/http");
 var config_json_1 = require("../../assets/config.json");
 require("rxjs/Rx");
-// import { PipeTransform, Pipe } from '@angular/core';
-// @Pipe({name: 'keys'})
-// export class KeysPipe implements PipeTransform {
-//   transform(value: any, args:string[]) : any {
-//     let keys = [];
-//     for (let key in value) {
-//       keys.push(key);
-//     }
-//     return keys;
-//   }
-// }
 var HomeComponent = /** @class */ (function () {
     function HomeComponent(
     // Notice here that we create and initialise the class members
     // http, route and router all in one place.
     // This style is part of the typescript functionality.
-    httpClient, route, router) {
+    httpClient, route) {
         this.httpClient = httpClient;
         this.route = route;
-        this.router = router;
         this.initialized = false;
     }
     // private jsonResultOfProtectedAPI: JSON;
@@ -42,6 +27,7 @@ var HomeComponent = /** @class */ (function () {
             var url = this.authorizationUrl + "?response_type=" + "code";
             url = url + "&client_id=" + this.clientId;
             url = url + "&redirect_uri=" + this.redirectUrl;
+            console.log(url);
             window.location.href = url;
         }
     };

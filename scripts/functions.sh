@@ -15,6 +15,12 @@ function check_tools() {
     git --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} git"
     curl --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} curl"
     ibmcloud --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} ibmcloud"    
+    yarn --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} yarn"    
+    php --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} php"   
+    php --ini | grep zip &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} php-pecl-zip"
+    composer --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} composer"    
+    laravel --version &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} laravel"
+    python --version | grep "Python 3" &> /dev/null || MISSING_TOOLS="${MISSING_TOOLS} python3"
     if [[ -n "$MISSING_TOOLS" ]]; then
       _err "Some tools (${MISSING_TOOLS# }) could not be found, please install them first and then run scripts/setup-app-id.sh"
       exit 1
@@ -78,4 +84,16 @@ function wait_for_service_to_become_active() {
             sleep 5
         fi
     done
+}
+
+function launch_browser_if_available() {
+  URL=$1
+
+  PREFERRED_APP_LAUNCHER=$(which xdg-open)
+  if [ "x${PREFERRED_APP_LAUNCHER}" != "x" ]
+  then
+    [[ -x ${PREFERRED_APP_LAUNCHER} ]] && exec "${PREFERRED_APP_LAUNCHER}" "$URL"
+  else 
+    _err "Could not find xdg-open to launch preferred browser."
+  fi
 }

@@ -25,7 +25,8 @@ Find out more about the main components:
 - [Serverless Web Applications on the IBM Cloud](#serverless-web-applications-on-the-ibm-cloud)
   - [Outline](#outline)
   - [Prerequisites](#prerequisites)
-  - [Installing Angular CLI (ng)](#installing-angular-cli-ng)
+  - [Installing Web Frameworks](#installing-web-frameworks)
+    - [Running local web servers](#running-local-web-servers)
   - [Setup the environment](#setup-the-environment)
   - [To remove all services](#to-remove-all-services)
   - [When things go wrong...](#when-things-go-wrong)
@@ -52,11 +53,78 @@ Make sure you have the following tools installed:
 
 This assumes you are running a version of Linux or similar.
 
-## Installing Angular CLI (ng)
+## Installing Web Frameworks
+
+If you are using Ubuntu use apt, if you are using Fedora use dnf.  The instructions here have been written for Fedora.  Here we are going to use:
+
+
+| Language | Framework | Package Manager | CLI tools |
+|----------|-----------|-----------------| --------- |
+| Typescript** | Angular | npm | npx,ng |
+| Typescript** | React | npm | npx,yarn | 
+| PHP | Laravel | Composer | artison |
+| Python 3 | Flask | Pip | venv |
+| Python 3 | Django | Pip | django-admin |
+
+
+** Typescript is a variant of Javascript.
+
 
 ```
 sudo npm install -g @angular/cli
+sudo npm install -g npx
+sudo npm install yarn -g
+sudo dnf -y install php
+sudo dnf -y install php-zip
 ```
+Install composer using the [download instructions](https://getcomposer.org/download/).
+```
+sudo mv composer.phar /usr/bin
+composer global require laravel/installer
+```
+Check where composer has installed laravel, it should be in either in either of these locations.  The tilda (~) is your home directory.
+```
+ls ~/.config/composer/vendor/bin/
+ls ~/composer/vendor/bin/
+```
+Export this path on your current terminal and in your .bashrc located in your home directory.
+```
+export PATH=$PATH:~/.config/composer/vendor/bin
+```
+
+### Running local web servers
+
+Immediately after download of this repository and setting up your environment you can serve the apps locally.  In a production environment you might use nginx or similar but for development it is useful to be able to review your project locally.
+
+```
+cd angular
+ng serve
+# Goto http://localhost:4200
+```
+
+```
+cd react-webapp
+yarn start
+# Goto http://localhost:3000
+```
+
+```
+cd laravel-webapp
+php artisan serve
+# Goto http://localhost:8000
+```
+
+```
+cd flask-webapp
+./start-local-server.sh
+```
+
+venv is the Virtual Environment, that allows you to test multiple versions of Python on the same machine.  When editing your application you should always activate this by typing 
+
+```. venv/bin/activate```
+
+Type ```deactivate``` to exit from the virtual environment.
+
 
 ## Setup the environment
 

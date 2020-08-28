@@ -1,25 +1,10 @@
 
-import { map } from 'rxjs/operators';
 import { Component } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-//RequestOptions, XHRBackend
-// , URLSearchParams, RequestOptions 
-// Headers
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import config from '../../assets/config.json';
-import { Observable } from 'rxjs';
 import 'rxjs/Rx';
-// import { PipeTransform, Pipe } from '@angular/core';
-// @Pipe({name: 'keys'})
-// export class KeysPipe implements PipeTransform {
-//   transform(value: any, args:string[]) : any {
-//     let keys = [];
-//     for (let key in value) {
-//       keys.push(key);
-//     }
-//     return keys;
-//   }
-// }
+
 @Component({
   selector: 'ibm-serverless-login',
   templateUrl: './home.component.html'
@@ -32,6 +17,7 @@ export class HomeComponent {
   private authorizationUrl: string;
   private clientId: string;
   private protectedUrl: string;
+  private webapp_redirect: string
 
   private accessToken: string;
   private refreshToken: string;
@@ -45,6 +31,7 @@ export class HomeComponent {
       let url = this.authorizationUrl + "?response_type=" + "code";
       url = url + "&client_id=" + this.clientId;
       url = url + "&redirect_uri=" + this.redirectUrl;
+      console.log(url);
       window.location.href = url;
     }
   }
@@ -68,8 +55,7 @@ export class HomeComponent {
     // http, route and router all in one place.
     // This style is part of the typescript functionality.
     private httpClient: HttpClient,
-    private route: ActivatedRoute,
-    private router: Router) {
+    private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {

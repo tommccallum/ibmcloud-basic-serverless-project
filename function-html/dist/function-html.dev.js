@@ -1,7 +1,0 @@
-"use strict";
-
-function main() {
-  return {
-    body: "\n    \n<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>OpenwhiskAngular</title>\n  <script>document.write('<base href=\"' + document.location + '\" />');</script>\n\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <link rel=\"icon\" type=\"image/x-icon\" href=\"favicon.ico\">\n</head>\n<body>\n  <app-root></app-root>\n<script type=\"text/javascript\" src=\"https://s3.eu-gb.cloud-object-storage.appdomain.cloud/serverlessweb-37-bucket-2093c83b-6a25-4a2f-9639-9b32c57417af/inline.bundle.js\"></script><script type=\"text/javascript\" src=\"https://s3.eu-gb.cloud-object-storage.appdomain.cloud/serverlessweb-37-bucket-2093c83b-6a25-4a2f-9639-9b32c57417af/polyfills.bundle.js\"></script><script type=\"text/javascript\" src=\"https://s3.eu-gb.cloud-object-storage.appdomain.cloud/serverlessweb-37-bucket-2093c83b-6a25-4a2f-9639-9b32c57417af/styles.bundle.js\"></script><script type=\"text/javascript\" src=\"https://s3.eu-gb.cloud-object-storage.appdomain.cloud/serverlessweb-37-bucket-2093c83b-6a25-4a2f-9639-9b32c57417af/vendor.bundle.js\"></script><script type=\"text/javascript\" src=\"https://s3.eu-gb.cloud-object-storage.appdomain.cloud/serverlessweb-37-bucket-2093c83b-6a25-4a2f-9639-9b32c57417af/main.bundle.js\"></script></body>\n</html>    \n    \n    "
-  };
-}

@@ -1,0 +1,83 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0",
+        "title": "djangowebapp"
+    },
+    "schemes": ["https"],
+    "produces": ["application/json"],
+    "paths": {
+        "/djangowebapp": {
+            "get": {
+                "operationId": "getWeb",
+                "x-openwhisk": {
+                    "namespace": "517bc152-9a1b-4a0f-b3a5-9f4e30a2b4da",
+                    "action": "djangowebapp",
+                    "package": "serverlessweb-44-pkg-public",
+                    "url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/517bc152-9a1b-4a0f-b3a5-9f4e30a2b4da/serverlessweb-44-pkg-public/djangowebapp.html"
+                },
+                "responses": {
+                    "200": {
+                        "description": "A successful invocation response"
+                    }
+                }
+            }
+        },
+        "/test2": {
+            "get": {
+                "operationId": "getTest2",
+                "x-openwhisk": {
+                    "namespace": "517bc152-9a1b-4a0f-b3a5-9f4e30a2b4da",
+                    "action": "angular",
+                    "package": "serverlessweb-44-pkg-public",
+                    "url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/517bc152-9a1b-4a0f-b3a5-9f4e30a2b4da/serverlessweb-44-pkg-public/angular.json",
+                    "auth": "ec104d11-76ed-4f08-80d9-8e07d7e6597c"
+                },
+                "responses": {
+                    "200": {
+                        "description": "A successful invocation response"
+                    }
+                }
+            }
+        }
+    },
+    "x-ibm-configuration": {
+        "assembly": {
+            "execute": [{
+                "operation-switch": {
+                    "case": [{
+                        "operations": ["getWeb"],
+                        "execute": [{>
+                        }, {
+                            "invoke": {
+                                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/517bc152-9a1b-4a0f-b3a5-9f4e30a2b4da/serverlessweb-44-pkg-public/djangowebapp.html",
+                                "verb": "keep"
+                            }
+                        }]
+                    }, {
+                        "operations": ["getTest2"],
+                        "execute": [{
+                            "set-variable": {
+                                "actions": [{
+                                    "set": "message.headers.X-Require-Whisk-Auth",
+                                    "value": "ec104d11-76ed-4f08-80d9-8e07d7e6597c"
+                                }]
+                            }
+                        }, {
+                            "invoke": {
+                                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/517bc152-9a1b-4a0f-b3a5-9f4e30a2b4da/serverlessweb-44-pkg-public/angular.json",
+                                "verb": "keep"
+                            }
+                        }]
+                    }],
+                    "otherwise": [],
+                    "title": "whisk-invoke"
+                }
+            }]
+        },
+        "cors": {
+            "enabled": true
+        }
+    },
+    "basePath": "/serverlessweb"
+}

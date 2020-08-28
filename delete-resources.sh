@@ -14,3 +14,8 @@ ibmcloud resource service-instance-delete ${OBJECT_STORAGE} -f
 ibmcloud fn namespace delete ${FN_NAMESPACE} 
 
 ibmcloud iam api-key-delete ${PROJECT_NAME} -f
+
+if [ -e "${PROJECT_NAME}.json" ]
+then
+  rm -f ${PROJECT_NAME}.json
+fi

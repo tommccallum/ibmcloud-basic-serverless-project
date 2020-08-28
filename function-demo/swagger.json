@@ -1,0 +1,63 @@
+{ 
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0",
+		"title": "demo"
+	},
+	"schemes": [
+		"https"
+	],
+	"produces": [
+		"text/html"
+	],
+	"paths": {
+		"/web": {
+			"get": {
+				"operationId": "getWeb",
+				"x-openwhisk": {
+					"namespace": "517bc152-9a1b-4a0f-b3a5-9f4e30a2b4da",
+					"action": "demo",
+					"package": "serverlessweb-44-pkg-public",
+					"url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/517bc152-9a1b-4a0f-b3a5-9f4e30a2b4da/serverlessweb-44-pkg-public/demo.html"
+				},
+				"responses": {
+					"200": {
+						"description": "A successful invocation response"
+					}
+				}
+			}
+		}
+	},
+	"x-ibm-configuration": {
+		"assembly": {
+			"execute": [
+				{
+					"operation-switch": {
+						"case": [
+							{
+								"operations": [
+									"getWeb"
+								],
+								"execute": [
+									{
+										"invoke": {
+											"target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/517bc152-9a1b-4a0f-b3a5-9f4e30a2b4da/serverlessweb-44-pkg-public/demo.html",
+											"verb": "keep"
+										}
+									}
+								]
+							}
+						],
+						"otherwise": [],
+						"title": "whisk-invoke"
+					}
+				}
+			]
+		},
+		"cors": {
+			"enabled": true
+		}
+	},
+	"basePath": "/serverlessweb"
+}
+

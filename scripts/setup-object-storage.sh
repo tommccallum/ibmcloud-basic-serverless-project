@@ -36,103 +36,16 @@ exec 1>$LOG_FILE 2>&1
 source ${root_folder}/functions.sh
 
 function setup() {
-  _out Creating Object Storage service instance
+  _out Creating Object Storage service instance: ${OBJECT_STORAGE}
   ibmcloud resource service-instance-create ${OBJECT_STORAGE} cloud-object-storage lite global
-  
   wait_for_service_to_become_active ${OBJECT_STORAGE}
   
   _out Creating Object Storage credentials
   ibmcloud resource service-key-create ${OBJECT_STORAGE}-credentials Reader --instance-name ${OBJECT_STORAGE}
-  
-  _out Creating bucket
-  IAM_TOKEN=$(ibmcloud iam oauth-tokens | awk '/IAM/{ print $4 }')
-  
+
   COS_ID=$(ibmcloud resource service-instance ${OBJECT_STORAGE} --id | awk '/crn/{ print $2 }')
   _out COS_ID: $COS_ID
   printf "\nCOS_ID=$COS_ID" >> $ENV_FILE
-  
-  #_out Set crn in cos config
-  #ibmcloud cos config crn --crn $COS_ID
-  
-  # if we get bucket already exists, change this and it will change it throughout
-  BUCKET_NAME="${BUCKET_PREFIX}-${APPID_TENANTID}"
-  _out BUCKET_NAME: $BUCKET_NAME
-  printf "\nBUCKET_NAME=$BUCKET_NAME" >> $ENV_FILE
-  ibmcloud cos create-bucket --bucket "${BUCKET_NAME}" --ibm-service-instance-id ${COS_ID} --region ${BLUEMIX_REGION}
-  if [ $? -ne 0 ]
-  then
-    _err Failed to create new bucket called ${BUCKET_NAME}
-  fi
-#   curl -X "PUT" "https://s3.us-south.objectstorage.softlayer.net/${BUCKET_NAME}" \
-#     -H "Authorization: Bearer ${IAM_TOKEN}" \
-#     -H "ibm-service-instance-id: ${COS_ID}"
-
-    
-  _out Building Angular application
-  cd ${root_folder}/../angular
-  ng build
-
-  #npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../angular/dist/index.html src=\" src=\"https://s3.${BLUEMIX_REGION}.objectstorage.softlayer.net/${BUCKET_NAME}/
-  OBJECT_URL="cloud-object-storage.appdomain.cloud"
-  BUCKET_URL="https://s3.${BLUEMIX_REGION}.${OBJECT_URL}/${BUCKET_NAME}"
-  _out BUCKET_URL: $BUCKET_URL
-  npm --prefix ${root_folder}/text-replace start ${root_folder}/text-replace ${root_folder}/../angular/dist/index.html src=\" src=\"${BUCKET_URL}
-
-  _out Uploading static web application resources
-#   curl -X "PUT" "${BUCKET_URL}/index.html" \
-#     -H "x-amz-acl: public-read" \
-#     -H "Authorization: Bearer ${IAM_TOKEN}" \
-#     -H "Content-Type: text/html; charset=utf-8" \
-#     --upload-file "${root_folder}/../angular/dist/index.html"
-
-  # Copy up all the files in angular/dist to the storage area
-  for local_file in $( find ${root_folder}/../angular/dist -maxdepth 1 -type f )
-  do
-    base=$(basename "$local_file")
-    _out "Uploading angular/dist/${base}"
-    curl -X "PUT" "${BUCKET_URL}/${base}" \
-        -H "x-amz-acl: public-read" \
-        -H "Authorization: Bearer ${IAM_TOKEN}" \
-        -H "Content-Type: text/plain; charset=utf-8" \
-        --upload-file "${local_file}"
-  done
-    
-#   curl -X "PUT" "${BUCKET_URL}/inline.bundle.js" \
-#     -H "x-amz-acl: public-read" \
-#     -H "Authorization: Bearer ${IAM_TOKEN}" \
-#     -H "Content-Type: text/plain; charset=utf-8" \
-#     --upload-file "${root_folder}/../angular/dist/inline.bundle.js"
-# 
-#   curl -X "PUT" "${BUCKET_URL}/polyfills.bundle.js" \
-#      -H "x-amz-acl: public-read" \
-#      -H "Authorization: Bearer ${IAM_TOKEN}" \
-#      -H "Content-Type: text/plain; charset=utf-8" \
-#      --upload-file "${root_folder}/../angular/dist/polyfills.bundle.js"
-# 
-#   curl -X "PUT" "${BUCKET_URL}/styles.bundle.js" \
-#      -H "x-amz-acl: public-read" \
-#      -H "Authorization: Bearer ${IAM_TOKEN}" \
-#      -H "Content-Type: text/plain; charset=utf-8" \
-#      --upload-file "${root_folder}/../angular/dist/styles.bundle.js"
-# 
-#   curl -X "PUT" "${BUCKET_URL}/main.bundle.js" \
-#      -H "x-amz-acl: public-read" \
-#      -H "Authorization: Bearer ${IAM_TOKEN}" \
-#      -H "Content-Type: text/plain; charset=utf-8" \
-#      --upload-file "${root_folder}/../angular/dist/main.bundle.js"
-# 
-#   curl -X "PUT" "${BUCKET_URL}/vendor.bundle.js" \
-#      -H "x-amz-acl: public-read" \
-#      -H "Authorization: Bearer ${IAM_TOKEN}" \
-#      -H "Content-Type: text/plain; charset=utf-8" \
-#      --upload-file "${root_folder}/../angular/dist/vendor.bundle.js"
-
-  COS_URL_HOME_BASE=${BUCKET_URL}
-  COS_URL_HOME="${COS_URL_HOME_BASE}/index.html"
-  printf "\nCOS_URL_HOME=$COS_URL_HOME" >> $ENV_FILE
-  printf "\nCOS_URL_HOME_BASE=$COS_URL_HOME_BASE" >> $ENV_FILE
-
-  _out You can now open index.html but the app does not work yet: ${COS_URL_HOME}
 }
 
 # Main script starts here

@@ -20,9 +20,18 @@ var request = require('request');
 
 function main(params) {
 
+	// here, resolve and reject are both functions
+	// that are really methods of the Promise class.
+	// Resolves set what is returned when success completion.
+	// Reject sets what is returned when fail.
+	// This is an interesting article if you want to learn
+	// more by looking at the following:
+	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise.
 	return new Promise((resolve, reject) => {
 		const code = params.code;
 
+		// This is the form to the app id service
+		// the redirect points to our api login/login endpoint.
 		let form = {
 			client_id: params.config.client_id,
 			client_secret: params.config.client_secret,
@@ -31,7 +40,8 @@ function main(params) {
 			redirect_uri: params.config.redirect_uri
 		};
 
-		let auth = new Buffer(form.client_id + ':' + form.client_secret).toString('base64');
+		// create the headers for our form to APP ID service
+		let auth = Buffer.from(form.client_id + ':' + form.client_secret).toString('base64');
 		let options = {
 			url: params.config.oauth_url + '/token',
 			method: 'POST',
@@ -43,6 +53,8 @@ function main(params) {
 		};
 		options.form = form;
 
+		// We send the form information using a 'request' object.
+		// We need to handle if we get an error or otherwise.
 		request(options, function (err, response, body) {
 			if (err || response.statusCode >= 400) {
 				const errorMessage = err || { statusCode: response.statusCode, body: body }
@@ -54,6 +66,11 @@ function main(params) {
 					body = JSON.parse(body);
 				}
 
+				// once we get our response from APP ID we are 
+				// also going to request some user info about
+				// the person who logged in.  This information 
+				// comes from the Cloud Directory Users found in 
+				// the App ID service under Manage Authentication\Cloud Directory\Users.
 				request({
 					url: params.config.oauth_url + '/userinfo',
 					method: 'GET',
@@ -74,6 +91,8 @@ function main(params) {
 							body2 = JSON.parse(body2);
 						}
 
+						// this is the value that will be returned upon success
+						// and will form the input into redirect.js function
 						resolve({						
 							access_token: body.access_token,
 							refresh_token: body.refresh_token,

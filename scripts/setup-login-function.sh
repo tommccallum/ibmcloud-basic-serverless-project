@@ -61,9 +61,9 @@ function setup() {
   printf "\",\n" >> $CONFIG_FILE
   printf "\"oauth_url\": \"" >> $CONFIG_FILE
   printf $APPID_OAUTHURL >> $CONFIG_FILE
-  printf "\",\n" >> $CONFIG_FILE
-  printf "\"webapp_redirect\": \"" >> $CONFIG_FILE
-  printf "http://localhost:4200" >> $CONFIG_FILE
+  #printf "\",\n" >> $CONFIG_FILE
+  #printf "\"webapp_redirect\": \"" >> $CONFIG_FILE
+  #printf "http://localhost:4200" >> $CONFIG_FILE
   printf "\"\n" >> $CONFIG_FILE
   printf "}" >> $CONFIG_FILE
 
@@ -149,7 +149,8 @@ if [ ! -f $ENV_FILE ]; then
   exit 1
 fi
 source $ENV_FILE
-export IBMCLOUD_ORG IBMCLOUD_API_KEY BLUEMIX_REGION APPID_TENANTID APPID_OAUTHURL APPID_CLIENTID APPID_SECRET CLOUDANT_USERNAME CLOUDANT_PASSWORD IBMCLOUD_SPACE APPID_MGMTURL
+export IBMCLOUD_ORG IBMCLOUD_API_KEY BLUEMIX_REGION APPID_TENANTID APPID_OAUTHURL APPID_CLIENTID 
+export APPID_SECRET CLOUDANT_USERNAME CLOUDANT_PASSWORD IBMCLOUD_SPACE APPID_MGMTURL
 
 _out Full install output in $LOG_FILE
 ibmcloud_login

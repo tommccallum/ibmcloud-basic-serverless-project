@@ -1,0 +1,13 @@
+{
+    "operations": [
+        "xxx-api-operation-name-xxx"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "xxx-action-url-xxx",
+                "verb": "keep"
+            }
+        }
+    ]
+},

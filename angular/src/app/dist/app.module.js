@@ -20,6 +20,7 @@ var hero_detail_component_1 = require("./hero-detail/hero-detail.component");
 var hero_service_1 = require("./heroes/hero.service");
 var config_component_1 = require("./config/config.component");
 var page_not_found_component_1 = require("./page-not-found/page-not-found.component");
+//import { WindowProviders } from './window_providers'
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }

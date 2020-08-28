@@ -1,8 +1,8 @@
 {
-    "authorizationUrl": "xxx",
-    "redirectUrl": "xxx",
-    "clientId": "xxx",
-    "protectedUrl": "xxx",
+    "authorizationUrl": "xxx-authorizationUrl-xxx",
+    "redirectUrl": "xxx-redirectUrl-xxx",
+    "clientId": "xxx-clientId-xxx",
+    "protectedUrl": "xxx-protectedUrl-xxx",
     "heroesUrl": "api/heroes",
     "textfile": "assets/textfile.txt"
 }

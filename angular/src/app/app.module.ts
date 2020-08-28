@@ -11,6 +11,7 @@ import { HeroDetailComponent } from './hero-detail/hero-detail.component';
 import { HeroService } from './heroes/hero.service';
 import { ConfigComponent } from './config/config.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component'
+//import { WindowProviders } from './window_providers'
 
 @NgModule({
   declarations: [

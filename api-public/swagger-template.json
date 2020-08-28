@@ -1,0 +1,36 @@
+{ 
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0",
+		"title": "xxx-api-name-xxx"
+	},
+	"schemes": [
+		"https"
+	],
+	"produces": [
+		"text/html"
+	],
+	"paths": {
+		xxx-paths-xxx
+	},
+	"x-ibm-configuration": {
+		"assembly": {
+			"execute": [
+				{
+					"operation-switch": {
+						"case": [
+							xxx-operations-xxx
+						],
+						"otherwise": [],
+						"title": "whisk-invoke"
+					}
+				}
+			]
+		},
+		"cors": {
+			"enabled": true
+		}
+	},
+	"basePath": "/xxx-api-basepath-xxx"
+}
+
