@@ -65,6 +65,7 @@ else
 fi
 
 cd ${FRAMEWORK_DIR}
+npm install -g @angular/cli >&3 2>&4
 ng build >&3 2>&4
 if [ $? -ne 0 ]; then
   _fatal "Error running ng build in $(abbreviate_file_path ${FRAMEWORK_DIR})"
