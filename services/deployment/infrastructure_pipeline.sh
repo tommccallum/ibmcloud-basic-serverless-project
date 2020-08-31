@@ -9,10 +9,10 @@ fi
 # as this is a PARENT process we do not see this change.
 # Therefore we have to add it ourselves for later processes.
 cur_folder="$(pwd)"
-if [ -e "${cur_folder}/ibmcloud-scripts" ]
+if [ -e "${cur_folder}/ibmcloud-scripts/bin" ]
 then
     echo "Adding ibmcloud-scripts to path"
-    export PATH=$PATH:${cur_folder}/ibmcloud-scripts
+    export PATH=$PATH:${cur_folder}/ibmcloud-scripts/bin
 else
     echo "Failed to find ibmcloud-scripts, unable to continue"
     exit 1
