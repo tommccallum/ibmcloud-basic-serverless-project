@@ -14,6 +14,8 @@ export PATH=$PATH:$(pwd)/ibmcloud-scripts
 
 REDIRECT_OUTPUT="FALSE"
 source ibm_std_functions.sh
+root_folder=$(get_root_folder)
+echo "ROOT_FOLDER: ${root_folder}"
 source "${root_folder}/../project-functions.sh"
 standard_start ${REDIRECT_OUTPUT}
 check_project_tools

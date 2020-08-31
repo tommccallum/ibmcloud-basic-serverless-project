@@ -33,6 +33,7 @@ Find out more about the main components:
   - [Run locally](#run-locally)
   - [What does what?](#what-does-what)
   - [When editing the app itself...](#when-editing-the-app-itself)
+  - [Continuous Deployment](#continuous-deployment)
   - [Ideas for further exercises](#ideas-for-further-exercises)
   - [Credits](#credits)
 
@@ -192,6 +193,10 @@ cd angular
 ng build
 ng test
 ```
+
+## Continuous Deployment
+
+Build artifacts are files that are carried over to the next build stage.  We can use these to not repeat work from earlier stages.  In this 
 
 
 ## Ideas for further exercises
