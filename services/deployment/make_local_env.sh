@@ -44,8 +44,8 @@ if [ ! -e "${EXPECTED_VARS}" -a "x$HOME" == "x/root" -a "x$HAS_PIPELINE_IN_CURRE
             exit 1
         else
             cp "$TEMPLATE" "$EXPECTED_VARS"
-            EXP_PROJECT_PREFIX=$(awk -F '-' '{ print $1 }' <<<$EXISTING_RESOURCE)
-            EXP_VERSION=$(awk -F '-' '{ print $2 }' <<<$EXISTING_RESOURCE)
+            EXP_PROJECT_PREFIX=$(awk -F '-' '{ print $1 }' <<< $EXISTING_RESOURCE)
+            EXP_VERSION=$(awk -F '-' '{ print $2 }' <<< $EXISTING_RESOURCE)
             echo "Updating version to $EXP_VERSION"
             sed -i "s#^VERSION=.*#VERSION=${EXP_VERSION}#" ${EXPECTED_VARS}
             source $EXPECTED_VARS
