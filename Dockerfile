@@ -9,6 +9,8 @@ RUN echo $TZ > /etc/timezone && \
     apt-get clean
 RUN apt-get -y update
 RUN apt-get -y install git curl sudo apt-utils
+ARG DOCKER_PROJECT_PREFIX 
+ENV PROJECT_PREFIX=$DOCKER_PROJECT_PREFIX
 RUN curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
 RUN mkdir -p /home/pipeline
 WORKDIR "/home/pipeline"
