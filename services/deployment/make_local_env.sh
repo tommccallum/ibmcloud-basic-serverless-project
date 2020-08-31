@@ -10,6 +10,23 @@ echo "root folder: ${root_folder}"
 EXPECTED_VARS="$root_folder/../../local.env"
 HAS_PIPELINE_IN_CURRENT_PATH=$(pwd | grep "/home/pipeline/")
 echo "HAS_PIPELINE_IN_CURRENT_PATH=${HAS_PIPELINE_IN_CURRENT_PATH}"
+ls $root_folder/../../
+if [ ! -e "${EXPECTED_VARS}" ]; then
+    echo "EXPECTED_VARS was missing"
+else 
+    echo "found Expected_VARS"
+fi
+if [ "x$HOME" == "x/root" ]; then
+    echo "HOME was /root"
+else
+    echo "HOME was not /root, $HOME"
+fi
+
+if [ "x$HAS_PIPELINE_IN_CURRENT_PATH" == "x" ]; then
+    echo "HAS_PIPELINE_IN_CURRENT_PATH was empty"
+else
+    echo "HAS_PIPELINE_IN_CURRENT_PATH was not empty ${HAS_PIPELINE_IN_CURRENT_PATH}"
+fi
 
 if [ ! -e "${EXPECTED_VARS}" -a "x$HOME" == "x/root" -a "x$HAS_PIPELINE_IN_CURRENT_PATH" != "x" ]; then
   echo " ** Pipeline detected. ** "
