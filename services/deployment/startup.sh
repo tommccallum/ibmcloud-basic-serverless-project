@@ -31,6 +31,12 @@ if [ ! -e "${cur_folder}/pipeline_vars.sh" ]; then
     fi
 fi
 
+${root_folder}/make_local_env.sh
+if [ $? -ne 0 ]; then
+    echo "Failed to create local.env using make_local_env.sh"
+    exit 1
+fi
+
 REDIRECT_OUTPUT="FALSE"
 source ibm_std_functions.sh
 root_folder=$(get_root_folder)
@@ -38,3 +44,4 @@ source "${root_folder}/../project-functions.sh"
 standard_start ${REDIRECT_OUTPUT}
 # TODO make this per framework
 check_tools
+
