@@ -18,7 +18,7 @@ fi
 export PATH=$PATH:${cur_folder}/ibmcloud-scripts/bin
 
 if [ ! -e "${cur_folder}/pipeline_vars.sh" ]; then
-    echo "$PATH" >> "${cur_folder}/pipeline_vars.sh"
+    echo "PATH=$PATH" >> "${cur_folder}/pipeline_vars.sh"
 
     ## write a variable we can read that tells us if we are in the pipeline
     root_folder=$(cd $(dirname $0); pwd)
