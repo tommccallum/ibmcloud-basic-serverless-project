@@ -27,7 +27,8 @@ _out "ENV: ${root_folder}/../../${LOCAL_ENV_TEMPLATE}"
 bump_version "${root_folder}/../../${LOCAL_ENV_TEMPLATE}"
 _out "ENV: ${root_folder}/../../${LOCAL_ENV_FILENAME}"
 cp "${root_folder}/../../${LOCAL_ENV_TEMPLATE}" "${root_folder}/../../${LOCAL_ENV_FILENAME}"
-ENV_FILE=$(find_environment)
+find_environment
+ENV_FILE=${RETVAL}
 _out "ENV: ${ENV_FILE}"
 exit_on_error $?
 source ${ENV_FILE}
