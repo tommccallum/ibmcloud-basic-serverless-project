@@ -65,9 +65,9 @@ else
 fi
 
 cd ${FRAMEWORK_DIR}
-ng build
+ng build >&3 2>&4
 if [ $? -ne 0 ]; then
-  _fatal "Error running ng build in $(abbreviate_file_path ${FRAMEWORKDIR})"
+  _fatal "Error running ng build in $(abbreviate_file_path ${FRAMEWORK_DIR})"
 else 
   _ok "ng build was successful"
 fi
