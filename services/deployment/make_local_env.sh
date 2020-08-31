@@ -8,26 +8,8 @@ echo "In $0"
 root_folder=$(cd $(dirname $0); pwd)
 echo "root folder: ${root_folder}"
 EXPECTED_VARS="$root_folder/../../local.env"
-HAS_PIPELINE_IN_CURRENT_PATH=$(pwd | grep "/home/pipeline/")
-echo "HAS_PIPELINE_IN_CURRENT_PATH=${HAS_PIPELINE_IN_CURRENT_PATH}"
-ls $root_folder/../../
-MISSING_EXPECTED_VARS=0
-if [ ! -e "${EXPECTED_VARS}" ]; then
-    MISSING_EXPECTED_VARS=1
-fi
-if [ "x$HOME" == "x/root" ]; then
-    echo "HOME was /root"
-else
-    echo "HOME was not /root, $HOME"
-fi
-
-if [ "x$HAS_PIPELINE_IN_CURRENT_PATH" == "x" ]; then
-    echo "HAS_PIPELINE_IN_CURRENT_PATH was empty"
-else
-    echo "HAS_PIPELINE_IN_CURRENT_PATH was not empty ${HAS_PIPELINE_IN_CURRENT_PATH}"
-fi
-
-if [ $MISSING_EXPECTED_VARS -gt 0 -a "x$HOME" == "x/root" -a "x$HAS_PIPELINE_IN_CURRENT_PATH" != "x" ]; then
+HAS_PIPELINE_IN_CURRENT_PATH=$(echo "${root_folder}" | grep "/home/pipeline/")
+if [ ! -e "${EXPECTED_VARS}" -a "x$HOME" == "x/root" -a "x$HAS_PIPELINE_IN_CURRENT_PATH" != "x" ]; then
   echo " ** Pipeline detected. ** "
   if [ "x${PROJECT_PREFIX}" == "x" ]; then
     echo "Set variable PROJECT_PREFIX to your project prefix in local.env.template in the pipeline variables."
