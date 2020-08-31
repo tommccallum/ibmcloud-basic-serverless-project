@@ -24,9 +24,10 @@ if [ ! -e "${cur_folder}/pipeline_vars.sh" ]; then
     root_folder=$(cd $(dirname $0); pwd)
     HAS_PIPELINE_IN_CURRENT_PATH=$(echo "${root_folder}" | grep "/home/pipeline/")
     if [ "x$HOME" == "x/root" -a "x$HAS_PIPELINE_IN_CURRENT_PATH" != "x" ]; then
-        echo " ** Pipeline detected. ** "
+        echo "Setting PIPELINE flag to 1"
         echo "PIPELINE=1" >> "${cur_folder}/pipeline_vars.sh"
     else
+        echo "Setting PIPELINE flag to 0"
         echo "PIPELINE=0" >> "${cur_folder}/pipeline_vars.sh"
     fi
 fi

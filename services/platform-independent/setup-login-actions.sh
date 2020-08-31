@@ -28,10 +28,9 @@ if [ "x$APPID_OAUTHURL" == "x" ]; then
     _fatal "App ID OAuth url was empty, check App ID details."
 fi
 readonly CONFIG_FILE="${root_folder}/../../function-login/config.json"
-if [ ! -e "${CONFIG_FILE}" ]; then
-    _fatal "Could not find '${CONFIG_FILE}'."
+if [ -e "${CONFIG_FILE}" ]; then
+    rm $CONFIG_FILE
 fi
-rm $CONFIG_FILE
 touch $CONFIG_FILE
 
 printf "{" >> $CONFIG_FILE
