@@ -14,6 +14,7 @@ standard_start ${REDIRECT_OUTPUT}
 
 root_folder=$(get_root_folder)
 rm "${root_folder}/*.log"
+run "${root_folder}/delete-resources.sh"
 run "${root_folder}/app_id_add_user.sh"
 run "${root_folder}/setup-function-namespace.sh"
 run "${root_folder}/setup-login-actions.sh"
