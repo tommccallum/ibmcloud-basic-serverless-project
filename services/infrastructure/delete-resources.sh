@@ -7,7 +7,7 @@ source ibm_std_functions.sh
 # we will copy over the ENV_FILE read it in and continue from there.
 root_folder=$(dirname $0; pwd)
 EXPECTED_VARS="$root_folder/../../local.env"
-if ( ! -e "${EXPECTED_VARS}" && "x$HOME" == "x/root" && grep "/home/pipeline/" <<< $(pwd) ); then
+if [ ! -e "${EXPECTED_VARS}" -a "x$HOME" == "x/root" -a grep "/home/pipeline/" <<< $(pwd) ]; then
   echo " ** Pipeline detected. ** "
   if [ "x${PROJECT_PREFIX}" == "x" ]; then
     echo "Set variable PROJECT_PREFIX to your project prefix in local.env.template in the pipeline variables."
