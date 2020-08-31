@@ -13,10 +13,16 @@ if [ ! -e "${FRAMEWORK_DIR}" ]; then
 fi
 
 ibmcloud_project_login ${PROJECT_NAME}
+set_default_function_namespace ${FN_NAMESPACE}
+if [ $? -ne 0 ]; then
+    _err "Failed to set default namespace ${FN_NAMESPACE}"
+    ibmcloud fn namespace list
+    _fatal
+fi
 
 API_LOGIN=$( ibmcloud fn api list | awk '/login\/login/ { print $4}' )
 if [ "x$API_LOGIN" == "x" ]; then
-  _fatal "Login API url could no be found, ensure you have run the platform-independent build and there were no errors."
+  _fatal "Login API url could not be found, ensure you have run the platform-independent build and there were no errors."
 fi
 _out API_LOGIN: ${API_LOGIN}
 
