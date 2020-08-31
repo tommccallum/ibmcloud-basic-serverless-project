@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+date
 echo "OS Details:"
 cat /etc/os-release
 echo "Kernel:"
@@ -12,7 +12,7 @@ cur_folder="$(pwd)"
 if [ ! -e "${cur_folder}/ibmcloud-scripts" ]; then
     # this is only done in the first build stage
     echo "Cloning ibmcloud-scripts"
-    git clone https://github.com/tommccallum/ibmcloud-scripts ${cur_folder}/ibmcloud-scripts
+    time git clone https://github.com/tommccallum/ibmcloud-scripts ${cur_folder}/ibmcloud-scripts
     ${cur_folder}/ibmcloud-scripts/install.sh
 fi
 export PATH=$PATH:${cur_folder}/ibmcloud-scripts/bin
@@ -32,7 +32,7 @@ if [ ! -e "${cur_folder}/pipeline_vars.sh" ]; then
     fi
 fi
 
-${root_folder}/make_local_env.sh
+${cur_folder}/services/deployment/make_local_env.sh
 if [ $? -ne 0 ]; then
     echo "Failed to create local.env using make_local_env.sh"
     exit 1
