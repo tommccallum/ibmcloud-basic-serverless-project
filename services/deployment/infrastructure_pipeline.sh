@@ -17,6 +17,7 @@ else
     echo "Failed to find ibmcloud-scripts, unable to continue"
     exit 1
 fi
+./make_local_env.sh
 ./services/infrastructure/delete-resources.sh
 if [ $? -ne 0 ]; then
     echo "Failed to remove all resources, check logs and manually remove."
