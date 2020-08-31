@@ -67,5 +67,5 @@ if [ ! -e "${EXPECTED_VARS}" -a "x$HOME" == "x/root" -a "x$HAS_PIPELINE_IN_CURRE
         fi
     fi
 else
-    echo "Detected we are not in a pipeline or docker instance"
+    echo "Detected we are not in a new pipeline or docker instance"
 fi
