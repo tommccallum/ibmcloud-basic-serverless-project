@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ibm_utility_functions.sh
+source ibm_std_functions.sh
 standard_project_script_start
 
 WORKLOAD="$1"
