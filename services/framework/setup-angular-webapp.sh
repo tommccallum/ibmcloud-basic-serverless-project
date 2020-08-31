@@ -64,4 +64,13 @@ else
   _ok "npm build was successful"
 fi
 
+cd ${FRAMEWORK_DIR}
+ng build
+if [ $? -ne 0 ]; then
+  _fatal "Error running ng build in $(abbreviate_file_path ${FRAMEWORKDIR})"
+else 
+  _ok "ng build was successful"
+fi
+
+
 _out To start the web application locally you can run ng serve in ${FRAMEWORK_DIR}
