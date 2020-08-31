@@ -48,6 +48,8 @@ if [ ! -e "${EXPECTED_VARS}" -a "x$HOME" == "x/root" -a "x$HAS_PIPELINE_IN_CURRE
             EXP_VERSION=$(echo "$EXISTING_RESOURCE" | awk -F '-' '{ print $2 }')
             echo "Updating version to $EXP_VERSION"
             sed -i "s#^VERSION=.*#VERSION=${EXP_VERSION}#" ${EXPECTED_VARS}
+            # modifying the original template to match the current version will stop the next bump from failing
+            sed -i "s#^VERSION=.*#VERSION=${EXP_VERSION}#" ${TEMPLATE}
             source $EXPECTED_VARS
             if [ "x$PROJECT_PREFIX" != "x$EXP_PROJECT_PREFIX" ]; then
                 echo "Found unexpected project prefix '${PROJECT_PREFIX}'."
