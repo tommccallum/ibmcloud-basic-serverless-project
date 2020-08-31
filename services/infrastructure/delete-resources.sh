@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "PATH=$PATH"
+echo "delete:PATH=$PATH"
 source ibm_std_functions.sh
 standard_project_script_start 
 ibmcloud_project_login ${PROJECT_NAME}

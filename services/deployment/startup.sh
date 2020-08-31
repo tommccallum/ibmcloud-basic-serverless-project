@@ -12,7 +12,7 @@ cur_folder="$(pwd)"
 git clone https://github.com/tommccallum/ibmcloud-scripts ${cur_folder}/ibmcloud-scripts
 echo "Adding ibmcloud-scripts to path"
 export PATH=$PATH:${cur_folder}/ibmcloud-scripts
-
+echo "startup:PATH=$PATH"
 REDIRECT_OUTPUT="FALSE"
 source ibm_std_functions.sh
 root_folder=$(get_root_folder)
