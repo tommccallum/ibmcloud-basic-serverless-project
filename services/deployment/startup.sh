@@ -33,6 +33,8 @@ if [ ! -e "${cur_folder}/pipeline_vars.sh" ]; then
 else
     echo "[$(date)] [$(basename $0)] Loading existing pipeline variables"
     source "${cur_folder}/pipeline_vars.sh"
+    echo "[$(date)] [$(basename $0)] Pipeline Flag: $PIPELINE"
+    echo "[$(date)] [$(basename $0)] PATH: $PATH"
 fi
 
 ${cur_folder}/services/deployment/make_local_env.sh
