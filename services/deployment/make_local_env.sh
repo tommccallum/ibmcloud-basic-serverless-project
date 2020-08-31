@@ -21,9 +21,9 @@ if [ ! -e "${EXPECTED_VARS}" -a "x$HOME" == "x/root" -a "x$HAS_PIPELINE_IN_CURRE
         echo "Failed login to IBM Cloud, check logs and try again in a bit"
         exit 1
     fi
-    KEY=$(ibmcloud iam api-keys | grep "${PROJECT_PREFIX}" | awk '{print $1}')
-    if [ "x$KEY" == "x" ]; then
-        echo "Key not found, assuming no resources exist currently for this project."
+    EXISTING_RESOURCE=$(ibmcloud resource service_instances | grep "${PROJECT_PREFIX}" | awk '{print $1}' | awk -F '-' '{ print $1"-"$2 }')
+    if [ "x$EXISTING_RESOURCE" == "x" ]; then
+        echo "No resource found with name '${PROJECT_PREFIX}', assuming no resources exist currently for this project."
         TEMPLATE="$root_folder/../../local.env.template"
         if [ ! -e "$TEMPLATE" ]; then
             echo "Failed to find local.env template"
@@ -44,8 +44,8 @@ if [ ! -e "${EXPECTED_VARS}" -a "x$HOME" == "x/root" -a "x$HAS_PIPELINE_IN_CURRE
             exit 1
         else
             cp "$TEMPLATE" "$EXPECTED_VARS"
-            EXP_PROJECT_PREFIX=$(awk -F '-' '{ print $1 }' <<<$KEY)
-            EXP_VERSION=$(awk -F '-' '{ print $2 }' <<<$KEY)
+            EXP_PROJECT_PREFIX=$(awk -F '-' '{ print $1 }' <<<$EXISTING_RESOURCE)
+            EXP_VERSION=$(awk -F '-' '{ print $2 }' <<<$EXISTING_RESOURCE)
             echo "Updating version to $EXP_VERSION"
             sed -i "s#^VERSION=.*#VERSION=${EXP_VERSION}#" ${EXPECTED_VARS}
             source $EXPECTED_VARS
