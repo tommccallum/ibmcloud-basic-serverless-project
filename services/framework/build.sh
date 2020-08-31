@@ -2,10 +2,10 @@
 
 cur_folder=$(pwd)
 if [ -e "$cur_folder/pipeline_vars.sh" ]; then
-    echo "Found pipeline variables file"
+    echo "[$(date)] [$(basename $0)] Found pipeline variables file"
     source "${cur_folder}/pipeline_vars.sh"
-    echo "Pipeline Flag: $PIPELINE"
-    echo "PATH: $PATH"
+    echo "[$(date)] [$(basename $0)] Pipeline Flag: $PIPELINE"
+    echo "[$(date)] [$(basename $0)] PATH: $PATH"
 fi
 
 REDIRECT_OUTPUT="FALSE"
