@@ -18,10 +18,6 @@ else
     echo "Failed to find ibmcloud-scripts, unable to continue"
     exit 1
 fi
-which python
-which python3
-ls /usr/bin/python
-shorten_file_path.py "/home/pipeline/ibmcloud-scripts/bin/deploy-ibm_login.log" "/home/pipeline/services"
 
 ${root_folder}/make_local_env.sh
 if [ $? -ne 0 ]; then

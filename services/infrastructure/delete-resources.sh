@@ -3,6 +3,10 @@
 source ibm_std_functions.sh
 standard_project_script_start 
 ibmcloud_project_login ${PROJECT_NAME}
+if [ $? -ne 0 ]; then
+  _out "Failed to login using project key, assuming new instance."
+  exit 0
+fi
 root_folder=$(get_root_folder)
 
 _out "Aliases"
