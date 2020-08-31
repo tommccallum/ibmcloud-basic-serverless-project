@@ -21,7 +21,7 @@ if [ ! -e "${EXPECTED_VARS}" -a "x$HOME" == "x/root" -a "x$HAS_PIPELINE_IN_CURRE
         echo "Failed login to IBM Cloud, check logs and try again in a bit"
         exit 1
     fi
-    EXISTING_RESOURCE=$(ibmcloud resource service-instances | grep "${PROJECT_PREFIX}" | awk '{print $1}' | awk -F '-' '{ print $1"-"$2 }')
+    EXISTING_RESOURCE=$(ibmcloud resource service-instances | grep "${PROJECT_PREFIX}" | head -n 1 | awk '{print $1}' | awk -F '-' '{ print $1"-"$2 }')
     if [ "x$EXISTING_RESOURCE" == "x" ]; then
         echo "No resource found with name '${PROJECT_PREFIX}', assuming no resources exist currently for this project."
         TEMPLATE="$root_folder/../../local.env.template"
