@@ -3,11 +3,11 @@
 # Called every time a project is run
 
 source ibm_std_functions.sh
-source ../project-functions.sh
+root_folder=$(get_root_folder)
+source ${root_folder}/../project-functions.sh
 
 standard_project_script_start ${LOCAL_ENV_FILENAME}
 sanity_check_local_vars
-root_folder=$(get_root_folder)
 
 function check_old_version() {
     local old_version="${VERSION}"
