@@ -11,13 +11,11 @@ echo "Cloning ibmcloud-scripts"
 cur_folder="$(pwd)"
 git clone https://github.com/tommccallum/ibmcloud-scripts ${cur_folder}/ibmcloud-scripts
 ${cur_folder}/ibmcloud-scripts/install.sh
-echo "Adding ibmcloud-scripts to path"
 export PATH=$PATH:${cur_folder}/ibmcloud-scripts/bin
 
 REDIRECT_OUTPUT="FALSE"
 source ibm_std_functions.sh
 root_folder=$(get_root_folder)
-echo "ROOT_FOLDER: ${root_folder}"
 source "${root_folder}/../project-functions.sh"
 standard_start ${REDIRECT_OUTPUT}
 # TODO make this per framework
