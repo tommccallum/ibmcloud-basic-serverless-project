@@ -18,6 +18,10 @@ else
     exit 1
 fi
 ./make_local_env.sh
+if [ $? -ne 0 ]; then
+    echo "Failed to create local.env using make_local_env.sh"
+    exit 1
+fi
 ./services/infrastructure/delete-resources.sh
 if [ $? -ne 0 ]; then
     echo "Failed to remove all resources, check logs and manually remove."
