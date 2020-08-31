@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # do not use _out and similar commands from ibm_std_functions.sh in this file
-
+# TODO this has been made redundant by make_local_env.sh, do we still need it?
 source ibm_std_functions.sh
 root_folder=$(get_root_folder)
 source ${root_folder}/../project-functions.sh
