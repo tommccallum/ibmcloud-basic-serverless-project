@@ -18,4 +18,4 @@ echo "ROOT_FOLDER: ${root_folder}"
 source "${root_folder}/../project-functions.sh"
 standard_start ${REDIRECT_OUTPUT}
 # TODO make this per framework
-check_project_tools
+check_tools
