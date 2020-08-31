@@ -21,6 +21,18 @@ if [ ! -e "${EXPECTED_VARS}" -a "x$HOME" == "x/root" -a "x$HAS_PIPELINE_IN_CURRE
   KEY=$(ibmcloud iam api-keys | grep "${PROJECT_PREFIX}" | awk '{print $1}' )
   if [ "x$KEY" == "x" ]; then
     echo "Key not found, assuming no resources exist currently for this project."
+    TEMPLATE="$root_folder/../../local.env.template"
+    if [ ! -e "$TEMPLATE" ]; then
+      echo "Failed to find local.env template"
+      exit 1
+    else
+        echo "Copying template to create new '${EXPECTED_VARS}'"
+        cp "$TEMPLATE" "$EXPECTED_VARS"
+        source $EXPECTED_VARS
+        echo "VERSION: $VERSION"
+        echo "PROJECT_PREFIX: $PROJECT_PREFIX"
+        echo "PROJECT_NAME: $PROJECT_NAME"
+    fi
     exit 0
   else 
     TEMPLATE="$root_folder/../../local.env.template"
