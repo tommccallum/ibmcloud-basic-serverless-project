@@ -5,7 +5,18 @@ if [ $? -ne 0 ]; then
     echo "Startup unexpectedly failed.  Check log, take copy of logs and screenshots, and report."
     exit 1
 fi
-echo "pipeline:PATH=$PATH"
+# Even though startup.sh exports the variable PATH updated,
+# as this is a PARENT process we do not see this change.
+# Therefore we have to add it ourselves for later processes.
+cur_folder="$(pwd)"
+if [ -e "${cur_folder}/ibmcloud-scripts" ]
+then
+    echo "Adding ibmcloud-scripts to path"
+    export PATH=$PATH:${cur_folder}/ibmcloud-scripts
+else
+    echo "Failed to find ibmcloud-scripts, unable to continue"
+    exit 1
+fi
 ./services/infrastructure/delete-resources.sh
 if [ $? -ne 0 ]; then
     echo "Failed to remove all resources, check logs and manually remove."
