@@ -1,6 +1,7 @@
 #!/bin/bash
 
-./services/deployment/startup.sh
+root_folder=$(cd $(basename $0); pwd)
+${root_folder}/startup.sh
 if [ $? -ne 0 ]; then
     echo "Startup unexpectedly failed.  Check log, take copy of logs and screenshots, and report."
     exit 1
@@ -17,17 +18,17 @@ else
     echo "Failed to find ibmcloud-scripts, unable to continue"
     exit 1
 fi
-./make_local_env.sh
+${root_folder}/make_local_env.sh
 if [ $? -ne 0 ]; then
     echo "Failed to create local.env using make_local_env.sh"
     exit 1
 fi
-./services/infrastructure/delete-resources.sh
+${root_folder}/../infrastructure/delete-resources.sh
 if [ $? -ne 0 ]; then
     echo "Failed to remove all resources, check logs and manually remove."
     exit 1
 fi
-./services/infrastructure/build.sh
+${root_folder}/../infrastructure/build.sh
 if [ $? == 0 ]; then
     echo
     echo
