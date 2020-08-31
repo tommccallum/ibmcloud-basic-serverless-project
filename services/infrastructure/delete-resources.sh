@@ -73,33 +73,33 @@ do
   fi
 done
 
-_out "API Keys"
-API_KEYS=( "${PROJECT_NAME}" )
-for apikey in ${API_KEYS[@]}
-do
-  _out "Checking for ${apikey}"
-  SVC_EXISTS=$(ibmcloud iam api-keys | grep "${apikey}" )
-  if [ "x$SVC_EXISTS" != "x" ]; then
-    ibmcloud iam api-key-delete ${apikey} -f
-    if [ $? -ne 0 ]; then 
-      _fatal "Failed to remove namespace '${apikey}', try manually using the IBM Cloud website."
-    else 
-      _ok "Deleted namespace '${apikey}' successfully"
-    fi
-  fi
-done
+# _out "API Keys"
+# API_KEYS=( "${PROJECT_NAME}" )
+# for apikey in ${API_KEYS[@]}
+# do
+#   _out "Checking for ${apikey}"
+#   SVC_EXISTS=$(ibmcloud iam api-keys | grep "${apikey}" )
+#   if [ "x$SVC_EXISTS" != "x" ]; then
+#     ibmcloud iam api-key-delete ${apikey} -f
+#     if [ $? -ne 0 ]; then 
+#       _fatal "Failed to remove namespace '${apikey}', try manually using the IBM Cloud website."
+#     else 
+#       _ok "Deleted namespace '${apikey}' successfully"
+#     fi
+#   fi
+# done
 
-_out "Sensitive files"
-file_path="${root_folder}/${PROJECT_NAME}.json"
-_out "Checking for $(abbreviate_file_path $file_path)"
-if [ -e "${file_path}" ]
-then
-  _out "Deleting $file_path"
-  rm -f ${file_path}
-  if [ -e "$file_path" ]; then
-    _fatal "Failed to remove $file_path"
-  else
-    _ok "File was deleted successfully"
-  fi
-fi
+# _out "Sensitive files"
+# file_path="${root_folder}/${PROJECT_NAME}.json"
+# _out "Checking for $(abbreviate_file_path $file_path)"
+# if [ -e "${file_path}" ]
+# then
+#   _out "Deleting $file_path"
+#   rm -f ${file_path}
+#   if [ -e "$file_path" ]; then
+#     _fatal "Failed to remove $file_path"
+#   else
+#     _ok "File was deleted successfully"
+#   fi
+# fi
 
