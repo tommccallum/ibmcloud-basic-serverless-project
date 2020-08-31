@@ -1,6 +1,6 @@
 #!/bin/bash
 
-root_folder=$(cd $(basename $0); pwd)
+root_folder=$(cd $(dirname $0); pwd)
 ${root_folder}/startup.sh
 if [ $? -ne 0 ]; then
     echo "Startup unexpectedly failed.  Check log, take copy of logs and screenshots, and report."

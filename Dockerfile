@@ -13,7 +13,7 @@ RUN curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
 RUN mkdir -p /home/pipeline
 WORKDIR "/home/pipeline"
 # invalid docker cache for git instance
-ADD https://api.github.com/repos/tommccallum/ibmcloud-basic-serverless-project/git/refs/heads/master /root/project_version.json
+ADD https://api.github.com/repos/tommccallum/ibmcloud-basic-serverless-project/git/refs/heads/angular-update /root/project_version.json
 RUN git clone https://github.com/tommccallum/ibmcloud-basic-serverless-project -b angular-update .
 RUN ls ./services/deployment
 RUN ./services/deployment/infrastructure_pipeline.sh
