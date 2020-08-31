@@ -14,10 +14,6 @@ if [ ! -e "${cur_folder}/ibmcloud-scripts" ]; then
     echo "Cloning ibmcloud-scripts"
     git clone https://github.com/tommccallum/ibmcloud-scripts ${cur_folder}/ibmcloud-scripts
     ${cur_folder}/ibmcloud-scripts/install.sh
-else 
-    # we want to update our build stage
-    echo "Pulling latest sources"
-    git pull
 fi
 export PATH=$PATH:${cur_folder}/ibmcloud-scripts/bin
 
