@@ -7,6 +7,7 @@ source ../project-functions.sh
 
 standard_project_script_start ${LOCAL_ENV_FILENAME}
 sanity_check_local_vars
+root_folder=$(get_root_folder)
 
 function check_old_version() {
     local old_version="${VERSION}"
@@ -22,8 +23,8 @@ function check_old_version() {
 
 check_old_version
 old_version=$VERSION
-bump_version "../../${LOCAL_ENV_TEMPLATE}"
-cp "../../${LOCAL_ENV_TEMPLATE}" "../../${LOCAL_ENV_FILENAME}"
+bump_version "${root_folder}/../../${LOCAL_ENV_TEMPLATE}"
+cp "${root_folder}/../../${LOCAL_ENV_TEMPLATE}" "${root_folder}/../../${LOCAL_ENV_FILENAME}"
 ENV_FILE=$(find_environment)
 exit_on_error $?
 source ${ENV_FILE}

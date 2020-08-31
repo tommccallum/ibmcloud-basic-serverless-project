@@ -5,6 +5,7 @@ source ibm_std_functions.sh
 standard_start ${REDIRECT_OUTPUT}
 
 root_folder=$(get_root_folder)
+rm "${root_folder}/*.log"
 run "${root_folder}/setup-project-first.sh"
 run "${root_folder}/setup-project-next.sh"
 run "${root_folder}/setup-project-keys.sh"
