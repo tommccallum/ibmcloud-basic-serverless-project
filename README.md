@@ -34,6 +34,7 @@ Find out more about the main components:
   - [What does what?](#what-does-what)
   - [When editing the app itself...](#when-editing-the-app-itself)
   - [Continuous Deployment](#continuous-deployment)
+  - [Build on local docker](#build-on-local-docker)
   - [Ideas for further exercises](#ideas-for-further-exercises)
   - [Credits](#credits)
 
@@ -198,6 +199,13 @@ ng test
 
 Build artifacts are files that are carried over to the next build stage.  We can use these to not repeat work from earlier stages.  In this 
 
+## Build on local docker
+
+This docker file is the same version of Ubuntu as on the deployment servers of IBMCloud.  This allows you to experiment without taking the time of setting up the continuous deployment services.
+
+```
+docker build . --build-arg DOCKER_PROJECT_PREFIX="serverlessweb" --build-arg DOCKER_IBMCLOUD_API_KEY=${IBMCLOUD_API_KEY}
+```
 
 ## Ideas for further exercises
 
