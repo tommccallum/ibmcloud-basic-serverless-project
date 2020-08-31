@@ -17,24 +17,23 @@ if [ ! -e "${cur_folder}/ibmcloud-scripts" ]; then
 fi
 export PATH=$PATH:${cur_folder}/ibmcloud-scripts/bin
 
-if [ ! -e "${cur_folder}/pipeline_vars.sh" ]; then
-    echo "export PATH=$PATH" >> "${cur_folder}/pipeline_vars.sh"
+# we cannot jsut reimport pipeline_vars between build stages as
+# the directory in /home/pipeline will change!  So we rebuild
+# this file for the later stages.
+if [ -e "${cur_folder}/pipeline_vars.sh" ]; then
+    rm "${cur_folder}/pipeline_vars.sh"
+fi
+echo "export PATH=$PATH" >> "${cur_folder}/pipeline_vars.sh"
 
-    ## write a variable we can read that tells us if we are in the pipeline
-    root_folder=$(cd $(dirname $0); pwd)
-    HAS_PIPELINE_IN_CURRENT_PATH=$(echo "${root_folder}" | grep "/home/pipeline/")
-    if [ "x$HOME" == "x/root" -a "x$HAS_PIPELINE_IN_CURRENT_PATH" != "x" ]; then
-        echo "[$(date)] [$(basename $0)] Setting PIPELINE flag to 1"
-        echo "export PIPELINE=1" >> "${cur_folder}/pipeline_vars.sh"
-    else
-        echo "[$(date)] [$(basename $0)] Setting PIPELINE flag to 0"
-        echo "export PIPELINE=0" >> "${cur_folder}/pipeline_vars.sh"
-    fi
+## write a variable we can read that tells us if we are in the pipeline
+root_folder=$(cd $(dirname $0); pwd)
+HAS_PIPELINE_IN_CURRENT_PATH=$(echo "${root_folder}" | grep "/home/pipeline/")
+if [ "x$HOME" == "x/root" -a "x$HAS_PIPELINE_IN_CURRENT_PATH" != "x" ]; then
+    echo "[$(date)] [$(basename $0)] Setting PIPELINE flag to 1"
+    echo "export PIPELINE=1" >> "${cur_folder}/pipeline_vars.sh"
 else
-    echo "[$(date)] [$(basename $0)] Loading existing pipeline variables"
-    source "${cur_folder}/pipeline_vars.sh"
-    echo "[$(date)] [$(basename $0)] Pipeline Flag: $PIPELINE"
-    echo "[$(date)] [$(basename $0)] PATH: $PATH"
+    echo "[$(date)] [$(basename $0)] Setting PIPELINE flag to 0"
+    echo "export PIPELINE=0" >> "${cur_folder}/pipeline_vars.sh"
 fi
 
 ${cur_folder}/services/deployment/make_local_env.sh
