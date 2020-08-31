@@ -1,7 +1,8 @@
 #!/bin/bash
 
 source ibm_std_functions.sh
-source ../../project-functions.sh
+root_folder=$(get_root_folder)
+source ${root_folder}/../../project-functions.sh
 
 standard_project_script_start
 ibmcloud_project_login ${PROJECT_NAME}
@@ -16,7 +17,7 @@ if [ "x${IBM_CLOUDANT_USERNAME}" == "x" ]; then
     _fatal "ibm cloudant username was empty"
 fi
 
-python add_test_data.py "${CLOUDANT_DB_NAME}"
+python3 add_test_data.py "${CLOUDANT_DB_NAME}"
 if [ $? -ne 0 ]; then
     _fatal "Failed to create expected data in collection '${CLOUDANT_DB_NAME}'"
 else

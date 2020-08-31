@@ -80,7 +80,8 @@ function create_framework_entry_points() {
 }
 
 source ibm_std_functions.sh
-source ../project-functions.sh
+root_folder=$(get_root_folder)
+source ${root_folder}/../project-functions.sh
 standard_project_script_start
 root_folder=$(get_root_folder)
 ibmcloud_project_login ${PROJECT_NAME}

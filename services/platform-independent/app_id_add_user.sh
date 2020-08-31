@@ -4,7 +4,8 @@
 # returns true, but I have not found a way to test for this yet.
 
 source ibm_std_functions.sh
-source ../project-functions.sh
+root_folder=$(get_root_folder)
+source ${root_folder}/../project-functions.sh
 standard_project_script_start
 check_basic_tools
 ibmcloud_project_login ${PROJECT_NAME}

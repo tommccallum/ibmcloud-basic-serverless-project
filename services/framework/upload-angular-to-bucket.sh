@@ -1,7 +1,8 @@
 #!/bin/bash
 
 source ibm_std_functions.sh
-source ../project-functions.sh
+root_folder=$(get_root_folder)
+source ${root_folder}/../project-functions.sh
 standard_project_script_start
 
 root_folder=$(get_root_folder)
