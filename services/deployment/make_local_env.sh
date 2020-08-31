@@ -4,9 +4,7 @@
 # For example if we are in a build pipeline, but the resources may still exist.
 # Just in case we will look for the top level key and if that exists then
 # we will copy over the ENV_FILE read it in and continue from there.
-echo "In $0"
 root_folder=$(cd $(dirname $0); pwd)
-echo "root folder: ${root_folder}"
 EXPECTED_VARS="$root_folder/../../local.env"
 HAS_PIPELINE_IN_CURRENT_PATH=$(echo "${root_folder}" | grep "/home/pipeline/")
 if [ ! -e "${EXPECTED_VARS}" -a "x$HOME" == "x/root" -a "x$HAS_PIPELINE_IN_CURRENT_PATH" != "x" ]; then

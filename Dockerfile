@@ -9,13 +9,14 @@ RUN echo $TZ > /etc/timezone && \
     apt-get clean
 RUN apt-get -y update
 RUN apt-get -y install git curl sudo apt-utils
-ARG DOCKER_PROJECT_PREFIX 
-ENV PROJECT_PREFIX=$DOCKER_PROJECT_PREFIX
 RUN curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
 RUN mkdir -p /home/pipeline
 WORKDIR "/home/pipeline"
+ARG DOCKER_PROJECT_PREFIX 
+ENV PROJECT_PREFIX=$DOCKER_PROJECT_PREFIX
+ARG DOCKER_IBMCLOUD_API_KEY
+ENV IBMCLOUD_API_KEY=$DOCKER_IBMCLOUD_API_KEY
 # invalid docker cache for git instance
 ADD https://api.github.com/repos/tommccallum/ibmcloud-basic-serverless-project/git/refs/heads/angular-update /root/project_version.json
 RUN git clone https://github.com/tommccallum/ibmcloud-basic-serverless-project -b angular-update .
-RUN ls ./services/deployment
 RUN ./services/deployment/infrastructure_pipeline.sh
