@@ -17,6 +17,20 @@ if [ ! -e "${cur_folder}/ibmcloud-scripts" ]; then
 fi
 export PATH=$PATH:${cur_folder}/ibmcloud-scripts/bin
 
+if [ ! -e "${cur_folder}/pipeline_vars.sh" ]; then
+    echo "$PATH" >> "${cur_folder}/pipeline_vars.sh"
+
+    ## write a variable we can read that tells us if we are in the pipeline
+    root_folder=$(cd $(dirname $0); pwd)
+    HAS_PIPELINE_IN_CURRENT_PATH=$(echo "${root_folder}" | grep "/home/pipeline/")
+    if [ -a "x$HOME" == "x/root" -a "x$HAS_PIPELINE_IN_CURRENT_PATH" != "x" ]; then
+        echo " ** Pipeline detected. ** "
+        echo "PIPELINE=1" >> "${cur_folder}/pipeline_vars.sh"
+    else
+        echo "PIPELINE=0" >> "${cur_folder}/pipeline_vars.sh"
+    fi
+fi
+
 REDIRECT_OUTPUT="FALSE"
 source ibm_std_functions.sh
 root_folder=$(get_root_folder)
