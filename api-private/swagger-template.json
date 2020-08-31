@@ -1,0 +1,60 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0",
+		"title": "xxx-api-name-xxx"
+	},
+	"schemes": [
+		"https"
+	],
+	"consumes": [
+		"application/json"
+	],
+	"produces": [
+		"application/json"
+	],
+	"paths": {
+		xxx-paths-xxx
+	},
+	"x-ibm-configuration": {
+		"assembly": {
+			"execute": [
+				{
+					"operation-switch": {
+						"case": [
+							xxx-operations-xxx
+						],
+						"otherwise": [],
+						"title": "whisk-invoke"
+					}
+				}
+			]
+		},
+		"cors": {
+			"enabled": true
+		}
+	},
+	"basePath": "/xxx-api-basepath-xxx",
+	"securityDefinitions": {
+		"app-id": {
+			"flow": "application",
+			"tokenUrl": "",
+			"type": "oauth2",
+			"x-provider": {
+				"name": "app-id",
+				"params": {
+					"tenantId": "xxx-tenantid-xxx"
+				}
+			},
+			"x-tokenintrospect": {
+				"url": null
+			}
+		}
+	},
+	"security": [
+		{
+			"app-id": []
+		}
+	]
+}
+

@@ -1,0 +1,31 @@
+"/getMorePeople": {
+    "get": {
+        "operationId": "getGetMorePeople",
+        "x-openwhisk": {
+            "namespace": "1c653ad5-3233-4f7e-b42d-46491a7158a9",
+            "action": "getMorePeople",
+            "package": "serverlessweb-62-pkg-private",
+            "url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-private/getMorePeople.json"
+        },
+        "responses": {
+            "200": {
+                "description": "A successful invocation response"
+            }
+        }
+    }
+},"/getPeople": {
+    "get": {
+        "operationId": "getGetPeople",
+        "x-openwhisk": {
+            "namespace": "1c653ad5-3233-4f7e-b42d-46491a7158a9",
+            "action": "getPeople",
+            "package": "serverlessweb-62-pkg-private",
+            "url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-private/getPeople.json"
+        },
+        "responses": {
+            "200": {
+                "description": "A successful invocation response"
+            }
+        }
+    }
+},

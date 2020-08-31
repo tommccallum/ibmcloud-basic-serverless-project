@@ -1,3 +1,16 @@
+{ 
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0",
+		"title": "public"
+	},
+	"schemes": [
+		"https"
+	],
+	"produces": [
+		"text/html"
+	],
+	"paths": {
 "/angularwebapp": {
     "get": {
         "operationId": "getAngularwebapp",
@@ -93,35 +106,101 @@
             }
         }
     }
-}"/demo": {
-    "get": {
-        "operationId": "getDemo",
-        "x-openwhisk": {
-            "namespace": "1c653ad5-3233-4f7e-b42d-46491a7158a9",
-            "action": "demo",
-            "package": "xxx-sample-package-xxx",
-            "url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-public/demo.html"
-        },
-        "responses": {
-            "200": {
-                "description": "A successful invocation response"
+}	},
+	"x-ibm-configuration": {
+		"assembly": {
+			"execute": [
+				{
+					"operation-switch": {
+						"case": [
+{
+    "operations": [
+        "getAngularwebapp"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-public/angularwebapp.html",
+                "verb": "keep"
             }
         }
-    }
+    ]
 },
-"/demo": {
-    "get": {
-        "operationId": "getDemo",
-        "x-openwhisk": {
-            "namespace": "1c653ad5-3233-4f7e-b42d-46491a7158a9",
-            "action": "demo",
-            "package": "xxx-sample-package-xxx",
-            "url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-public/demo.html"
-        },
-        "responses": {
-            "200": {
-                "description": "A successful invocation response"
+{
+    "operations": [
+        "getReactwebapp"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-public/reactwebapp.html",
+                "verb": "keep"
             }
         }
-    }
+    ]
 },
+{
+    "operations": [
+        "getLaravelwebapp"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-public/laravelwebapp.html",
+                "verb": "keep"
+            }
+        }
+    ]
+},
+{
+    "operations": [
+        "getFlaskwebapp"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-public/flaskwebapp.html",
+                "verb": "keep"
+            }
+        }
+    ]
+},
+{
+    "operations": [
+        "getDjangowebapp"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-public/djangowebapp.html",
+                "verb": "keep"
+            }
+        }
+    ]
+},
+{
+    "operations": [
+        "getDemo"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-public/demo.html",
+                "verb": "keep"
+            }
+        }
+    ]
+}						],
+						"otherwise": [],
+						"title": "whisk-invoke"
+					}
+				}
+			]
+		},
+		"cors": {
+			"enabled": true
+		}
+	},
+	"basePath": "/serverlessweb"
+}
+

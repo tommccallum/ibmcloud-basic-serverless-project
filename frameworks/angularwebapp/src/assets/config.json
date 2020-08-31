@@ -1,0 +1,8 @@
+{
+    "authorizationUrl": "https://eu-gb.appid.cloud.ibm.com/oauth/v4/70fdf8f2-3b76-4e58-a77c-b97ffde57d91",
+    "redirectUrl": "https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/1e474d1f0c084b435b48d029b07734bbe4c798b7eeb446eedee2db4ea018be88/login/login",
+    "clientId": "5d0e28c4-676a-41af-a66f-7caeca0d89e3",
+    "protectedUrl": "https://service.eu.apiconnect.ibmcloud.com/gws/apigateway/api/1e474d1f0c084b435b48d029b07734bbe4c798b7eeb446eedee2db4ea018be88/private",
+    "heroesUrl": "api/heroes",
+    "textfile": "assets/textfile.txt"
+}

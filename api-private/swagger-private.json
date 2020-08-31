@@ -1,0 +1,112 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0",
+		"title": "private"
+	},
+	"schemes": [
+		"https"
+	],
+	"consumes": [
+		"application/json"
+	],
+	"produces": [
+		"application/json"
+	],
+	"paths": {
+"/getMorePeople": {
+    "get": {
+        "operationId": "getGetMorePeople",
+        "x-openwhisk": {
+            "namespace": "1c653ad5-3233-4f7e-b42d-46491a7158a9",
+            "action": "getMorePeople",
+            "package": "serverlessweb-62-pkg-private",
+            "url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-private/getMorePeople.json"
+        },
+        "responses": {
+            "200": {
+                "description": "A successful invocation response"
+            }
+        }
+    }
+},"/getPeople": {
+    "get": {
+        "operationId": "getGetPeople",
+        "x-openwhisk": {
+            "namespace": "1c653ad5-3233-4f7e-b42d-46491a7158a9",
+            "action": "getPeople",
+            "package": "serverlessweb-62-pkg-private",
+            "url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-private/getPeople.json"
+        },
+        "responses": {
+            "200": {
+                "description": "A successful invocation response"
+            }
+        }
+    }
+}	},
+	"x-ibm-configuration": {
+		"assembly": {
+			"execute": [
+				{
+					"operation-switch": {
+						"case": [
+{
+    "operations": [
+        "getGetMorePeople"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-private/getMorePeople.json",
+                "verb": "keep"
+            }
+        }
+    ]
+},{
+    "operations": [
+        "getGetPeople"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-private/getPeople.json",
+                "verb": "keep"
+            }
+        }
+    ]
+}						],
+						"otherwise": [],
+						"title": "whisk-invoke"
+					}
+				}
+			]
+		},
+		"cors": {
+			"enabled": true
+		}
+	},
+	"basePath": "/private",
+	"securityDefinitions": {
+		"app-id": {
+			"flow": "application",
+			"tokenUrl": "",
+			"type": "oauth2",
+			"x-provider": {
+				"name": "app-id",
+				"params": {
+					"tenantId": "70fdf8f2-3b76-4e58-a77c-b97ffde57d91"
+				}
+			},
+			"x-tokenintrospect": {
+				"url": null
+			}
+		}
+	},
+	"security": [
+		{
+			"app-id": []
+		}
+	]
+}
+

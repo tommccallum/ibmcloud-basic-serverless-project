@@ -1,5 +1,5 @@
 # specify version to keep our names unique within the various namespaces
-VERSION=62
+VERSION=51
 
 # define names for all our resources
 PROJECT_PREFIX="serverlessweb"
@@ -10,23 +10,16 @@ PROJECT_SHORT="sweb"
 PROJECT_NAME="${PROJECT_PREFIX}-${VERSION}"
 BUCKET_PREFIX="${PROJECT_SHORT}-${VERSION}-bkt"
 FN_NAMESPACE="${PROJECT_NAME}-app-ns"
-FN_NS_DESCRIPTION="Sample Serverless Framework App"
 FN_SAMPLE_PACKAGE="${PROJECT_NAME}-pkg-sample"
 FN_PUBLIC_PACKAGE="${PROJECT_NAME}-pkg-public"
 FN_PRIVATE_PACKAGE="${PROJECT_NAME}-pkg-private"
 FN_GENERIC_PACKAGE="${PROJECT_NAME}-pkg-generic"
-FUNCTION_PUBLIC_URL="https://eu-gb.functions.appdomain.cloud/api/v1/web"
-OBJECT_STORAGE_NAME="${PROJECT_NAME}-object-storage"
+OBJECT_STORAGE="${PROJECT_NAME}-object-storage"
 APP_ID_NAME="${PROJECT_NAME}-app-id"
-CLOUDANT_NAME="${PROJECT_NAME}-cloudant"
-CLOUDANT_DB_NAME="${PROJECT_PREFIX}"
-OBJECT_STORAGE_URL="cloud-object-storage.appdomain.cloud"
+CLOUDANT="${PROJECT_NAME}-cloudant"
+
 API_BASEPATH="${PROJECT_PREFIX}"
 LOGIN_API_BASEPATH="login"
-HIDDEN_API_BASEPATH="private"
-NODE_VERSION="nodejs:10"
+HIDDEN_API_BASEPATH="path"
 
-DEMO_USER="user@demo.email"
-DEMO_PASSWORD="verysecret"
-FRAMEWORKS_ROOT_DIR="frameworks"
-FRAMEWORKS=( "angularwebapp" "reactwebapp" "laravelwebapp" "flaskwebapp" "djangowebapp" )
+FRAMEWORKS=( "angular" "reactwebapp" "laravelwebapp" "flaskwebapp" "djangowebapp" )

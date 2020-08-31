@@ -29,7 +29,7 @@ function main() {
     <body>
       <div class="container">
         <ul>
-        <li><a href="xxx-angular-api-entry-xxx">Angular Demo</a></li>
+        <li><a href="xxx-angularwebapp-api-entry-xxx">Angular Demo</a></li>
         <li><a href="xxx-reactwebapp-api-entry-xxx">React Demo</a></li>
         <li><a href="xxx-laravelwebapp-api-entry-xxx">Laravel Demo</a></li>
         <li><a href="xxx-flaskwebapp-api-entry-xxx">Flask Demo</a></li>

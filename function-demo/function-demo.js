@@ -29,11 +29,11 @@ function main() {
     <body>
       <div class="container">
         <ul>
-        <li><a href="https://eu-gb.functions.appdomain.cloud/api/v1/web/31a5de2e-fcbf-4a96-ab2c-188783dd8537/serverlessweb-50-pkg-public/angular">Angular Demo</a></li>
-        <li><a href="https://eu-gb.functions.appdomain.cloud/api/v1/web/31a5de2e-fcbf-4a96-ab2c-188783dd8537/serverlessweb-50-pkg-public/reactwebapp">React Demo</a></li>
-        <li><a href="https://eu-gb.functions.appdomain.cloud/api/v1/web/31a5de2e-fcbf-4a96-ab2c-188783dd8537/serverlessweb-50-pkg-public/laravelwebapp">Laravel Demo</a></li>
-        <li><a href="https://eu-gb.functions.appdomain.cloud/api/v1/web/31a5de2e-fcbf-4a96-ab2c-188783dd8537/serverlessweb-50-pkg-public/flaskwebapp">Flask Demo</a></li>
-        <li><a href="https://eu-gb.functions.appdomain.cloud/api/v1/web/31a5de2e-fcbf-4a96-ab2c-188783dd8537/serverlessweb-50-pkg-public/djangowebapp">Django Demo</a></li>
+        <li><a href="https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-public/angularwebapp">Angular Demo</a></li>
+        <li><a href="https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-public/reactwebapp">React Demo</a></li>
+        <li><a href="https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-public/laravelwebapp">Laravel Demo</a></li>
+        <li><a href="https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-public/flaskwebapp">Flask Demo</a></li>
+        <li><a href="https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-public/djangowebapp">Django Demo</a></li>
         </ul>
       </div>
     </html>

@@ -1,0 +1,25 @@
+{
+    "operations": [
+        "getGetMorePeople"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-private/getMorePeople.json",
+                "verb": "keep"
+            }
+        }
+    ]
+},{
+    "operations": [
+        "getGetPeople"
+    ],
+    "execute": [
+        {
+            "invoke": {
+                "target-url": "https://eu-gb.functions.appdomain.cloud/api/v1/web/1c653ad5-3233-4f7e-b42d-46491a7158a9/serverlessweb-62-pkg-private/getPeople.json",
+                "verb": "keep"
+            }
+        }
+    ]
+},

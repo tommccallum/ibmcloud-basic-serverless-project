@@ -1,0 +1,16 @@
+"xxx-api-entry-name-xxx": {
+    "get": {
+        "operationId": "xxx-api-operation-name-xxx",
+        "x-openwhisk": {
+            "namespace": "xxx-namespace-xxx",
+            "action": "xxx-action-name-xxx",
+            "package": "xxx-sample-package-xxx",
+            "url": "xxx-action-url-xxx"
+        },
+        "responses": {
+            "200": {
+                "description": "A successful invocation response"
+            }
+        }
+    }
+},
